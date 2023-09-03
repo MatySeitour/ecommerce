@@ -1,11 +1,20 @@
-import { CategoriesHome } from "./components/CategoriesHome";
+import { GetStaticProps } from "next";
+import { CreateCategory } from "./components/CreateCategories";
 import { SearchHome } from "./components/SearchHome";
+import RootLayout from "./layout";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Nav } from "./components/Navs/Nav";
+import { cookies } from "next/headers";
 
-export default function Home() {
+export default async function Home() {
   return (
-    <main className="min-h-screen w-full bg-slate-100 pt-24 px-2">
-      <SearchHome />
-      <CategoriesHome />
-    </main>
+    <RootLayout>
+      <Nav />
+      <main className="min-h-screen w-full bg-slate-100 pt-24 px-2">
+        <SearchHome />
+        <CreateCategory />
+      </main>
+    </RootLayout>
   );
 }
