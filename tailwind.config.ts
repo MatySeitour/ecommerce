@@ -38,6 +38,9 @@ const config: Config = {
               medium: "#3b82f6",
               strong: "#1d4ed8",
             },
+            error: {
+              medium: "#f44336",
+            },
             hover: "#00A55A",
           },
         },
