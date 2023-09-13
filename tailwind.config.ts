@@ -40,6 +40,7 @@ const config: Config = {
             },
             error: {
               medium: "#f44336",
+              strong: "#ff0000",
             },
             hover: "#00A55A",
           },
