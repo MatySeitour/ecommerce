@@ -11,7 +11,7 @@ export default async function Home() {
   return (
     <RootLayout>
       <Nav />
-      <main className="min-h-screen w-full bg-slate-100 pt-24 px-2">
+      <main className="min-h-screen w-full bg-slate-100 px-2 pt-24">
         <SearchHome />
         <CreateCategory />
       </main>
