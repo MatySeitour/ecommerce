@@ -2,15 +2,30 @@ import NavLogin from "../components/Navs/NavLogin";
 import "../globals.css";
 import { varela } from "../utils/fonts";
 import { FormLogin } from "../components/FormLogin";
+import { cookies, headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { getSession } from "../hooks/session";
 
-export default function login() {
+async function getData() {
+  const sessionCookie = cookies().get("authorization");
+
+  if (sessionCookie?.name != "authorization") return false;
+  const isLogin = await getSession(sessionCookie);
+  console.log("este es looooogin", isLogin);
+
+  if (!isLogin) return false;
+  return redirect("/");
+}
+
+export default async function login() {
+  const log = await getData();
   return (
     <>
       <NavLogin />
       <main
-        className={`flex justify-between items-center min-h-screen w-screen bg-slate-200 md:px-12 ${varela.className}`}
+        className={`flex min-h-screen w-screen items-center justify-between bg-slate-200 md:px-12 ${varela.className}`}
       >
-        <div className="flex flex-row justify-center items-center gap-10 w-full">
+        <div className="flex w-full flex-row items-center justify-center gap-10">
           <FormLogin />
         </div>
       </main>
