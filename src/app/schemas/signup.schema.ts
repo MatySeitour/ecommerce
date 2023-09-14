@@ -38,11 +38,28 @@ export const firstStepSchema = z
     path: ["confirmPassword"],
   });
 
-export const secondStepSchema = z.object({
-  logoCompany: z
-    .any()
-    .refine(
-      (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
-      "Sólo se permiten imagenes con la extensión .png",
-    ),
-});
+export const secondStepSchema = z
+  .object({
+    logoCompany: z
+      .any()
+      .refine((file) => {
+        return file.length == 0 || ACCEPTED_IMAGE_TYPES.includes(file[0]?.type);
+      }, "Sólo se permiten imagenes con la extensión .png")
+      .optional(),
+    businessType: z.string().refine((select) => {
+      return (
+        select === "Tengo un negocio fisico" ||
+        select === "Tengo un negocio digital"
+      );
+    }, "Selecciona una opción"),
+    businessAddress: z.string().optional(),
+    businessOpen: z.string().refine((data) => {
+      console.log(data);
+      return data != "";
+    }, "selecciona algo"),
+    businessClosed: z.string(),
+  })
+  .refine((data) => data.businessType !== "Tengo un negocio fisico", {
+    message: "Por favor, escribe una dirección",
+    path: ["businessAddress"],
+  });
