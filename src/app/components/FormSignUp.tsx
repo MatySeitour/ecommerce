@@ -1,106 +1,81 @@
-import { Input } from "@nextui-org/input";
+"use client";
+
 import { Button } from "@nextui-org/button";
+import { useForm, FieldValues } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import multiForm from "../hooks/multiForm";
+import FormFirstStep from "./formsSignup/FormFirstStep";
+import FormSecondStep from "./formsSignup/FormSecondStep";
+import { firstStepSchema, secondStepSchema } from "../schemas/signup.schema";
 
 export default function FormSignUp() {
+  const { step, backStep, nextStep, isLastStep } = multiForm();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(step === 1 ? firstStepSchema : secondStepSchema),
+  });
+
+  const [values, setValues] = useState<any>([]);
+  const onSubmit = async (data: FieldValues, e: any) => {
+    e.preventDefault();
+    if (!isLastStep) {
+      nextStep(step);
+      setValues(() => {
+        return { ...values, ...data };
+      });
+    }
+  };
+
+  console.log(values);
   return (
-    <div
-      className="h-auto w-96 px-4 py-2 flex flex-col gap-2
-          "
-    >
-      <span className="text-sm text-secondary">Paso 01 / 04</span>
-      <h2 className="text-3xl text-primary font-extrabold">Crea tu negocio</h2>
-      <h3 className="text-lg text-primary font-medium">
+    <div className="flex h-auto w-auto flex-col gap-2 px-6 py-2 ">
+      <span className="text-sm text-secondary">{`Paso ${step} / 4`}</span>
+      <h2 className="text-3xl font-extrabold text-primary">Crea tu negocio</h2>
+      <h3 className="text-lg font-medium text-primary">
         Crea el perfil de tu negocio online{" "}
       </h3>
-      <form className="flex flex-col gap-4">
-        <Input
-          type="text"
-          label="Nombre del negocio"
-          labelPlacement="outside"
-          placeholder="Escribe el nombre de tu negocio"
-          className="text-primary h-auto "
-          classNames={{
-            inputWrapper: [
-              "p-2",
-              "group-data-[focus=true]:border-details-low rounded-[4px] min-h-4 max-h-8",
-            ],
-            label: ["text-primary font-semibold text-xs"],
-          }}
-        />
-        <Input
-          type="email"
-          label="Correo Electrónico"
-          labelPlacement="outside"
-          placeholder="Escribe el correo electrónico "
-          className="text-primary"
-          classNames={{
-            inputWrapper: [
-              "p-2",
-              "group-data-[focus=true]:border-details-low rounded-[4px] min-h-4 max-h-8",
-            ],
-            label: ["text-primary font-semibold text-xs"],
-          }}
-        />
-        <Input
-          type="password"
-          label="Contraseña"
-          labelPlacement="outside"
-          placeholder="Escribe una contraseña de tu cuenta"
-          className="text-primary"
-          classNames={{
-            inputWrapper: [
-              "p-2",
-              "group-data-[focus=true]:border-details-low rounded-[4px] min-h-4 max-h-8",
-            ],
-            label: ["text-primary font-semibold text-xs"],
-          }}
-        />
-        <Input
-          type="password"
-          label="Confirmar contraseña"
-          labelPlacement="outside"
-          placeholder="Vuelve a escribir la contraseña"
-          className="text-primary"
-          classNames={{
-            inputWrapper: [
-              "p-2",
-              "group-data-[focus=true]:border-details-low min-h-4 rounded-[4px] max-h-8",
-            ],
-            label: ["text-primary font-semibold text-xs"],
-          }}
-        />
-        <Input
-          type="text"
-          label="Numero de teléfono - celular"
-          labelPlacement="outside"
-          placeholder="Escribe un numero de teléfono"
-          className="text-primary"
-          classNames={{
-            inputWrapper: [
-              "p-2",
-              "group-data-[focus=true]:border-details-low min-h-4 rounded-[4px] max-h-8",
-            ],
-            label: ["text-primary font-semibold text-xs"],
-          }}
-        />
-        <p className="text-xs">
-          Esta información se guardará de forma segura según{" "}
-          <b className="underline">
-            los términos de servicio y la política de privacidad.
-          </b>
-        </p>
-        <div className="flex flex-row justify-center items-center gap-4">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex max-w-xl flex-col gap-4"
+      >
+        <div className="relative h-60 overflow-hidden px-2">
+          {step >= 1 && (
+            <FormFirstStep step={step} errors={errors} register={register} />
+          )}
+
+          {step >= 1 && (
+            <FormSecondStep step={step} errors={errors} register={register} />
+          )}
+        </div>
+
+        <div className="text-center">
+          <p className="text-xs">
+            Esta información se guardará de forma segura según{" "}
+            <b className="underline">
+              los términos de servicio y la política de privacidad.
+            </b>
+          </p>
+        </div>
+        <div className="flex flex-row items-center justify-center gap-4">
           <Button
-            className="bg-white text-details-medium"
+            className="bg-white text-details-medium hover:bg-white/40"
             radius="sm"
+            onClick={() => backStep(step)}
             size="md"
           >
-            Ayuda?
+            Atrás
           </Button>
           <Button
-            className="bg-details-medium text-white w-full"
+            // onClick={() => completeFormStep()}
+            className="w-full bg-details-medium text-white hover:bg-details-medium/90"
             radius="sm"
             size="md"
+            type="submit"
           >
             Siguiente paso
           </Button>
