@@ -1,6 +1,11 @@
 import axios from "axios";
 
-export async function getSession(serverCookie?: any) {
+type cookieType = {
+  name: string;
+  value: string;
+};
+
+export async function getSession(serverCookie?: cookieType) {
   const url = `http://localhost:3000/validate`;
   const options = serverCookie
     ? {
@@ -11,6 +16,5 @@ export async function getSession(serverCookie?: any) {
         withCredentials: true,
       };
   const rawSession = await axios.get(url, options);
-  console.log("este es raw", rawSession);
   return rawSession.data;
 }
