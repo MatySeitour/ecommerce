@@ -11,7 +11,6 @@ async function getData() {
 
   if (sessionCookie?.name != "authorization") return false;
   const isLogin = await getSession(sessionCookie);
-  console.log("este es looooogin", isLogin);
 
   if (!isLogin) return false;
   return redirect("/");
