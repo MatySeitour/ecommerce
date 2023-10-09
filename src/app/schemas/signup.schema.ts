@@ -46,18 +46,19 @@ export const secondStepSchema = z
         return file.length == 0 || ACCEPTED_IMAGE_TYPES.includes(file[0]?.type);
       }, "Sólo se permiten imagenes con la extensión .png")
       .optional(),
-    businessType: z.string().refine((select) => {
-      return (
-        select === "Tengo un negocio fisico" ||
-        select === "Tengo un negocio digital"
-      );
-    }, "Selecciona una opción"),
+    businessType: z.string().optional(),
+    // refine((select) => {
+    //   return (
+    //     select === "Tengo un negocio fisico" ||
+    //     select === "Tengo un negocio digital"
+    //   );
+    // }, "Selecciona una opción"),
     businessAddress: z.string().optional(),
-    businessOpen: z.string().refine((data) => {
-      console.log(data);
-      return data != "";
-    }, "selecciona algo"),
-    businessClosed: z.string(),
+    businessOpen: z.string().optional(),
+  })
+  .refine((example) => example.businessType !== "Tengo un negocio fisico", {
+    message: "Por favor, escribe una dirección",
+    path: ["businessOpen"],
   })
   .refine((data) => data.businessType !== "Tengo un negocio fisico", {
     message: "Por favor, escribe una dirección",
