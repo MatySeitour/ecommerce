@@ -8,9 +8,23 @@ import multiForm from "../hooks/multiForm";
 import FormFirstStep from "./formsSignup/FormFirstStep";
 import FormSecondStep from "./formsSignup/FormSecondStep";
 import { firstStepSchema, secondStepSchema } from "../schemas/signup.schema";
+import { useStepExample } from "../store/stepsStore";
+import { HiMiniCheckCircle } from "react-icons/hi2";
+import { motion } from "framer-motion";
 
 export default function FormSignUp() {
-  const { step, backStep, nextStep, isLastStep } = multiForm();
+  const {
+    step,
+    backStep,
+    verifyEmail,
+    errorEmail,
+    skipState,
+    setSkipState,
+    skipSignUp,
+    values,
+    sendData,
+    // setStep,
+  } = multiForm();
 
   const {
     register,
@@ -20,67 +34,150 @@ export default function FormSignUp() {
     resolver: zodResolver(step === 1 ? firstStepSchema : secondStepSchema),
   });
 
-  const [values, setValues] = useState<any>([]);
-  const onSubmit = async (data: FieldValues, e: any) => {
-    e.preventDefault();
-    if (!isLastStep) {
-      nextStep(step);
-      setValues(() => {
-        return { ...values, ...data };
-      });
+  const { increment, skip } = useStepExample();
+
+  const onSubmit = async (data: FieldValues) => {
+    if (step == 1) {
+      const a = await verifyEmail(data);
+      console.log(a);
+    }
+    if (skipState) {
+      try {
+        skipSignUp(data);
+        const a = await sendData(values);
+        console.log(a);
+        // skip();
+      } catch (e) {
+        console.error(e);
+        setSkipState(false);
+      }
+      // setStep(4);
     }
   };
-
   console.log(values);
+
   return (
-    <div className="flex h-auto w-auto flex-col gap-2 px-6 py-2 ">
-      <span className="text-sm text-secondary">{`Paso ${step} / 4`}</span>
-      <h2 className="text-3xl font-extrabold text-primary">Crea tu negocio</h2>
-      <h3 className="text-lg font-medium text-primary">
-        Crea el perfil de tu negocio online{" "}
-      </h3>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex max-w-xl flex-col gap-4"
+    <div className={`h-full w-full overflow-hidden`}>
+      <div
+        className={
+          step != 4
+            ? "visible flex h-full w-full flex-col items-center justify-center gap-4 px-6 py-2 transition-all"
+            : "invisible hidden h-full w-full flex-col items-center justify-center gap-4 px-6 py-2 transition-all"
+        }
       >
-        <div className="relative h-60 overflow-hidden px-2">
-          {step >= 1 && (
-            <FormFirstStep step={step} errors={errors} register={register} />
-          )}
+        <span className="text-sm text-secondary">{`Paso ${step} / 3`}</span>
+        <h2 className="text-3xl font-extrabold text-primary">
+          Crea tu negocio
+        </h2>
+        <h3 className="text-lg font-medium text-primary">
+          Crea el perfil de tu negocio online{" "}
+        </h3>
+        {step != 1 && (
+          <div className="max-w-sm text-xs font-semibold text-secondary">
+            Si desear agregar más datos sobre tu negocio más tarde, puedes
+            saltearte todos estos pasos.
+          </div>
+        )}
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+          <div className="relative h-60 overflow-hidden px-2">
+            {step >= 1 && (
+              <FormFirstStep
+                step={step}
+                errors={errors}
+                register={register}
+                errorEmail={errorEmail}
+              />
+            )}
 
-          {step >= 1 && (
-            <FormSecondStep step={step} errors={errors} register={register} />
-          )}
-        </div>
+            {step >= 1 && (
+              <FormSecondStep step={step} errors={errors} register={register} />
+            )}
+          </div>
 
-        <div className="text-center">
-          <p className="text-xs">
-            Esta información se guardará de forma segura según{" "}
-            <b className="underline">
-              los términos de servicio y la política de privacidad.
-            </b>
-          </p>
-        </div>
-        <div className="flex flex-row items-center justify-center gap-4">
-          <Button
-            className="bg-white text-details-medium hover:bg-white/40"
-            radius="sm"
-            onClick={() => backStep(step)}
-            size="md"
+          <div className="text-center">
+            <p className="text-xs">
+              Esta información se guardará de forma segura según{" "}
+              <b className="underline">
+                los términos de servicio y la política de privacidad.
+              </b>
+            </p>
+          </div>
+          <div className="flex flex-row items-center justify-center gap-4">
+            <Button
+              className={`bg-white text-details-medium hover:bg-white/40 ${
+                step < 2 && `hidden`
+              }`}
+              radius="sm"
+              onClick={() => backStep(step)}
+              size="md"
+            >
+              Atrás
+            </Button>
+            <Button
+              isLoading={isSubmitting ? true : false}
+              className={`w-full bg-details-medium text-white hover:bg-details-medium/90 `}
+              radius="sm"
+              size="md"
+              type="submit"
+            >
+              {isSubmitting ? "" : "Siguiente paso"}
+            </Button>
+            {step > 1 && (
+              <Button
+                onClick={() => setSkipState(true)}
+                isLoading={isSubmitting ? true : false}
+                className="w-full max-w-[7rem] bg-details-medium text-white hover:bg-details-medium/90"
+                radius="sm"
+                size="md"
+                type="submit"
+              >
+                {isSubmitting ? "" : "Omitir"}
+              </Button>
+            )}
+          </div>
+        </form>
+      </div>
+      <div
+        className={
+          step == 4
+            ? "flex h-full w-full items-center justify-center"
+            : "h-0 w-0"
+        }
+      >
+        {step == 4 && (
+          <motion.div
+            initial={{ translateY: 1000 }}
+            animate={{ translateY: 0 }}
+            transition={{
+              type: "spring",
+              stiffness: 260,
+              damping: 20,
+            }}
+            className={"h-[300px] w-[500px] rounded-md bg-white"}
           >
-            Atrás
-          </Button>
-          <Button
-            // onClick={() => completeFormStep()}
-            className="w-full bg-details-medium text-white hover:bg-details-medium/90"
-            radius="sm"
-            size="md"
-            type="submit"
-          >
-            Siguiente paso
-          </Button>
-        </div>
-      </form>
+            <div className="h-full w-full">
+              <div className="flex h-full w-full flex-col items-center justify-center gap-3">
+                <HiMiniCheckCircle className="h-24 w-24 text-green-400" />
+                <div></div>
+                <p className="mb-4 text-center text-xl font-medium text-primary">
+                  ¡Tu cuenta fue creada con éxito!
+                </p>
+                <Button
+                  disabled={isSubmitting}
+                  type="submit"
+                  color="primary"
+                  variant="shadow"
+                  className="w-full max-w-[18rem] bg-success text-white hover:bg-success/90"
+                  radius="sm"
+                  isLoading={isSubmitting ? true : false}
+                >
+                  {isSubmitting ? "" : "Iniciar sesión"}
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </div>
     </div>
   );
 }
