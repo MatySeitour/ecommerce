@@ -24,15 +24,13 @@ export const CreateCategory = () => {
       const formData = new FormData(e.currentTarget);
       const a = formData.get("title-category");
       const b = formData.get("upload");
-      console.log(a, b);
       const res = await axios.postForm(
         "http://127.0.0.1:3000/category/create",
         {
           title: formData.get("title-category"),
           upload: formData.get("upload"),
-        }
+        },
       );
-      console.log(res);
     } catch (e) {
       console.error(e);
     }
@@ -50,12 +48,12 @@ export const CreateCategory = () => {
 
   return (
     <>
-      <div className="flex flex-wrap gap-3 justify-center items-center">
+      <div className="flex flex-wrap items-center justify-center gap-3">
         <Button
           key={backdrops}
           variant="flat"
           onPress={() => handleOpen(backdrops)}
-          className="capitalize text-white bg-primary hover:bg-hover"
+          className="bg-primary capitalize text-white hover:bg-hover"
         >
           Crear categoria
         </Button>
@@ -65,7 +63,7 @@ export const CreateCategory = () => {
         backdrop={backdrop}
         isOpen={isOpen}
         onClose={onClose}
-        className="w-80 h-auto"
+        className="h-auto w-80"
         placement="center"
       >
         <form onSubmit={handleSubmit}>
@@ -86,23 +84,23 @@ export const CreateCategory = () => {
                       label="Categoría"
                       color="primary"
                       placeholder="Escribe el nombre de la categoría"
-                      className="placeholder:text-green-400 text-slate-500"
+                      className="text-slate-500 placeholder:text-green-400"
                       variant="underlined"
                     />
-                    <p className="text-slate-400/70 text-[0.7rem] px-1">
+                    <p className="px-1 text-[0.7rem] text-slate-400/70">
                       El nombre de la categoria no debe llevar simbolos
                     </p>
                   </div>
-                  <div className="py-2 flex flex-col gap-2">
+                  <div className="flex flex-col gap-2 py-2">
                     <label
                       htmlFor="upload"
-                      className="text-primary text-xs font-medium"
+                      className="text-xs font-medium text-primary"
                     >
                       Selecciona una imagen para la categoria
                     </label>
                     <label
                       htmlFor="upload"
-                      className="flex w-full text-sm cursor-pointer flex-row items-center justify-center gap-2 border border-white/30 bg-primary rounded-md p-1 text-white outline-none placeholder:text-white focus:border-white"
+                      className="flex w-full cursor-pointer flex-row items-center justify-center gap-2 rounded-md border border-white/30 bg-primary p-1 text-sm text-white outline-none placeholder:text-white focus:border-white"
                     >
                       {file ? (
                         <span className="text-white">{file.name}</span>
