@@ -42,6 +42,9 @@ const config: Config = {
               medium: "#f44336",
               strong: "#ff0000",
             },
+            success: {
+              light: "#5cb85c",
+            },
             hover: "#00A55A",
           },
         },
