@@ -1,6 +1,10 @@
 import { Input } from "@nextui-org/input";
 import { Tooltip } from "@nextui-org/tooltip";
-import { IoMdInformationCircleOutline } from "react-icons/io";
+import {
+  IoMdInformationCircleOutline,
+  IoMdEyeOff,
+  IoMdEye,
+} from "react-icons/io";
 
 export default function SignupInput({
   step,
@@ -12,6 +16,8 @@ export default function SignupInput({
   errorMessage,
   errorEmail,
   type,
+  isVisible,
+  handleVisible,
 }: {
   step: number;
   errors: any;
@@ -22,24 +28,36 @@ export default function SignupInput({
   errorMessage: string;
   type: string;
   errorEmail?: number | undefined;
+  isVisible?: boolean;
+  handleVisible?: () => void | undefined;
 }) {
-  // validationState={
-  //   errors?.email?.message
-  //     ? `invalid`
-  //     : errorEmail === 400
-  //     ? "invalid"
-  //     : "valid"
-  // }
+  const isPassword =
+    field === "password" || field === "confirmPassword" ? true : false;
 
   return (
     <div className="flex items-center justify-center gap-2">
       <Input
         {...register(`${field}`, { required: "company is required" })}
-        type={type}
+        type={isPassword ? (isVisible ? "text" : "password") : field}
         label={label}
         id={field}
         labelPlacement="outside"
         placeholder={placeholder}
+        endContent={
+          isPassword && (
+            <button
+              className="focus:outline-none"
+              type="button"
+              onClick={handleVisible}
+            >
+              {isVisible ? (
+                <IoMdEye className="pointer-events-none text-2xl text-default-400" />
+              ) : (
+                <IoMdEyeOff className="pointer-events-none text-2xl text-default-400" />
+              )}
+            </button>
+          )
+        }
         className="h-auto text-primary"
         validationState={
           errorMessage ? `invalid` : errorEmail === 400 ? "invalid" : "valid"
