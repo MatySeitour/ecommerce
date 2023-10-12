@@ -44,6 +44,7 @@ const config: Config = {
             },
             success: {
               light: "#5cb85c",
+              medium: "#18C9C4",
             },
             hover: "#00A55A",
           },
