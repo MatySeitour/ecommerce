@@ -7,6 +7,13 @@ interface StepValue {
   skip: () => void;
 }
 
+interface StepsState {
+  firstStep: boolean;
+  secondStep: boolean;
+  thirthStep: boolean;
+  completeFirstStep: () => void;
+}
+
 export const useStepExample = create<StepValue>((set) => ({
   step: 1,
   increment: (value: number) =>
@@ -14,4 +21,11 @@ export const useStepExample = create<StepValue>((set) => ({
   decrement: (value: number) =>
     set((state: any) => ({ step: state.step - value })),
   skip: () => set(() => ({ step: 4 })),
+}));
+
+export const stepsState = create<StepsState>((set) => ({
+  firstStep: false,
+  secondStep: false,
+  thirthStep: false,
+  completeFirstStep: () => set((state: any) => ({ firstStep: true })),
 }));
