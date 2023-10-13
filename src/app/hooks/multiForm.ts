@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { useState } from "react";
 import { FieldValues } from "react-hook-form";
-import { useStepExample } from "../store/stepsStore";
+import { stepsState, useStepExample } from "../store/stepsStore";
 
 interface SignUpData {
   company?: string;
@@ -16,6 +16,8 @@ export default function multiForm() {
   const [values, setValues] = useState<SignUpData>();
   const [errorEmail, setErrorEmail] = useState<number | undefined>(0);
   const [skipState, setSkipState] = useState<boolean | undefined>(false);
+
+  const { firstStep, secondStep, thirdStep, completeFirstStep } = stepsState();
 
   const { step, increment, decrement, skip } = useStepExample();
 
@@ -50,12 +52,17 @@ export default function multiForm() {
       );
       nextStep(step, data);
       setErrorEmail(res.status);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
+      completeFirstStep();
+
+      return true;
+    } catch (error: any) {
+      if (error?.response?.data == "Este mail no es válido") {
+        // console.log(error?.response?.data == "Este mail no es válido");
         setErrorEmail(error?.response?.status);
-        console.error(error?.response?.status);
+        console.error(error?.response);
+        return true;
       } else {
-        throw new Error("estamos teniendo problemas");
+        return false;
       }
     }
   }
@@ -101,5 +108,6 @@ export default function multiForm() {
     skipState,
     setSkipState,
     increment,
+    addValuesForm,
   };
 }
