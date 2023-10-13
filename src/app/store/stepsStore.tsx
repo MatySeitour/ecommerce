@@ -10,8 +10,10 @@ interface StepValue {
 interface StepsState {
   firstStep: boolean;
   secondStep: boolean;
-  thirthStep: boolean;
+  thirdStep: boolean;
   completeFirstStep: () => void;
+  completeSecondStep: () => void;
+  completeThirdStep: () => void;
 }
 
 export const useStepExample = create<StepValue>((set) => ({
@@ -26,6 +28,8 @@ export const useStepExample = create<StepValue>((set) => ({
 export const stepsState = create<StepsState>((set) => ({
   firstStep: false,
   secondStep: false,
-  thirthStep: false,
-  completeFirstStep: () => set((state: any) => ({ firstStep: true })),
+  thirdStep: false,
+  completeFirstStep: () => set(() => ({ firstStep: true })),
+  completeSecondStep: () => set(() => ({ secondStep: true })),
+  completeThirdStep: () => set(() => ({ thirdStep: true })),
 }));
