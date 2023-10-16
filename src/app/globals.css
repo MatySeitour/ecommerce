@@ -3,13 +3,25 @@
 @tailwind utilities;
 
 .step-line {
-  background-image: linear-gradient(to top, #fff, #fff, #18c964, #18c964);
-  background-size: auto 280%;
+  background-image: linear-gradient(to right, #fff, #fff, #18c964, #18c964);
+  background-size: 300% 300%;
   background-position: 0 100%;
   transition: background-position 0.5s;
 }
 
 .step-line__active {
-  background-position: 0 0;
+  background-position: -50% 0;
   transition: all 0.5s ease;
+}
+
+.animation-delay__100 {
+  animation-delay: 0s;
+}
+
+.animation-delay__200 {
+  animation-delay: 2s;
+}
+
+.animation-delay__300 {
+  animation-delay: 4s;
 }
