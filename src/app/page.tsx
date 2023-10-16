@@ -9,12 +9,10 @@ import { cookies } from "next/headers";
 
 export default async function Home() {
   return (
-    <RootLayout>
-      <Nav />
-      <main className="min-h-screen w-full bg-slate-100 px-2 pt-24">
-        <SearchHome />
-        <CreateCategory />
-      </main>
-    </RootLayout>
+    // <Nav />
+    <main className="min-h-screen w-full bg-slate-100 px-2 pt-24">
+      <SearchHome />
+      <CreateCategory />
+    </main>
   );
 }
