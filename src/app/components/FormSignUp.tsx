@@ -3,16 +3,19 @@
 import { Button } from "@nextui-org/button";
 import { useForm, FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
 import multiForm from "../hooks/multiForm";
 import FormFirstStep from "./formsSignup/FormFirstStep";
 import FormSecondStep from "./formsSignup/FormSecondStep";
 import { firstStepSchema, secondStepSchema } from "../schemas/signup.schema";
-import { useStepExample } from "../store/stepsStore";
+import { stepsState, useStepExample } from "../store/stepsStore";
 import { HiMiniCheckCircle } from "react-icons/hi2";
 import { motion } from "framer-motion";
+import Steps from "./Steps";
 
 export default function FormSignUp() {
+  const router = useRouter();
+
   const {
     step,
     backStep,
@@ -23,6 +26,8 @@ export default function FormSignUp() {
     skipSignUp,
     values,
     sendData,
+    nextStep,
+    addValuesForm,
     // setStep,
   } = multiForm();
 
@@ -34,11 +39,22 @@ export default function FormSignUp() {
     resolver: zodResolver(step === 1 ? firstStepSchema : secondStepSchema),
   });
 
-  const { increment, skip } = useStepExample();
+  const { firstStep, secondStep, completeSecondStep } = stepsState();
 
   const onSubmit = async (data: FieldValues) => {
     if (step == 1) {
       const a = await verifyEmail(data);
+      if (a == false) {
+        router.push("/error-server");
+      }
+    }
+    if (step == 2) {
+      nextStep(1, data);
+      completeSecondStep();
+    }
+    if (step == 3) {
+      addValuesForm(data);
+      const a = await sendData(values);
       console.log(a);
     }
     if (skipState) {
@@ -65,19 +81,20 @@ export default function FormSignUp() {
             : "invisible hidden h-full w-full flex-col items-center justify-center gap-4 px-6 py-2 transition-all"
         }
       >
-        <span className="text-sm text-secondary">{`Paso ${step} / 3`}</span>
+        <Steps />
+        {/* <span className="text-sm text-secondary">{`Paso ${step} / 3`}</span> */}
         <h2 className="text-3xl font-extrabold text-primary">
           Crea tu negocio
         </h2>
         <h3 className="text-lg font-medium text-primary">
           Crea el perfil de tu negocio online{" "}
         </h3>
-        {step != 1 && (
+        {/* {step != 1 && (
           <div className="max-w-sm text-xs font-semibold text-secondary">
             Si desear agregar más datos sobre tu negocio más tarde, puedes
             saltearte todos estos pasos.
           </div>
-        )}
+        )} */}
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <div className="relative h-60 overflow-hidden px-2">
             {step >= 1 && (
@@ -93,7 +110,14 @@ export default function FormSignUp() {
               <FormSecondStep step={step} errors={errors} register={register} />
             )}
           </div>
-
+          <span
+            className={`text-center text-primary opacity-0 transition-opacity ${
+              step > 1 && `opacity-100 transition-opacity`
+            }`}
+          >
+            Si lo deseas, puedes omitir los pasos siguientes para completarlos
+            más tarde.
+          </span>
           <div className="text-center">
             <p className="text-xs">
               Esta información se guardará de forma segura según{" "}
@@ -102,6 +126,11 @@ export default function FormSignUp() {
               </b>
             </p>
           </div>
+          {/* {!errorServer && (
+            <div className="text-2xl text-error-medium">
+              Lo sentimos, estamos teniendo problemas
+            </div>
+          )} */}
           <div className="flex flex-row items-center justify-center gap-4">
             <Button
               className={`bg-white text-details-medium hover:bg-white/40 ${
