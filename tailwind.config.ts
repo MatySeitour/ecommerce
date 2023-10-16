@@ -15,6 +15,20 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      keyframes: {
+        loadingIcons: {
+          "0%": { transform: "translateX(300%)" },
+          "25%": {
+            transform: "translateX(-50%)",
+          },
+          "100%": {
+            transform: "translateX(-300%)",
+          },
+        },
+      },
+      animation: {
+        loadingIcons: "loadingIcons 6s ease infinite",
+      },
     },
   },
   darkMode: "class",
