@@ -3,6 +3,8 @@ import { Tooltip } from "@nextui-org/tooltip";
 import { useState } from "react";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { Select, SelectItem } from "@nextui-org/select";
+import { Avatar } from "@nextui-org/react";
+import { CameraIcon } from "@/app/components/CameraIcon";
 
 export default function FormSecondStep({
   step,
@@ -37,7 +39,26 @@ export default function FormSecondStep({
           : `invisible absolute grid translate-x-[40rem] grid-cols-2 gap-4 transition-all`
       }
     >
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-4">
+        <Avatar
+          showFallback
+          src="https://images.unsplash.com/broken"
+          fallback={
+            <CameraIcon
+              className="h-6 w-6 animate-pulse text-default-500"
+              fill="currentColor"
+              size={20}
+            />
+          }
+        />
+        <Avatar
+          showFallback
+          name="Jane"
+          src="https://images.unsplash.com/broken"
+        />
+        <Avatar name="Joe" src="https://images.unsplash.com/broken" />
+      </div>
+      {/* <div className="flex items-center gap-2">
         <div className="flex flex-col">
           <label className="block origin-top-left pb-1.5 text-xs font-semibold text-primary transition-all !duration-200 !ease-out will-change-auto group-data-[invalid=true]:!text-error-strong motion-reduce:transition-none">
             Logo de tu negocio
@@ -89,7 +110,7 @@ export default function FormSecondStep({
             </Tooltip>
           </div>
         )}
-      </div>
+      </div> */}
 
       <div className="flex items-center gap-2">
         <div className="w-full pt-6">
@@ -187,9 +208,9 @@ export default function FormSecondStep({
         )}
       </div>
 
-      <div></div>
-
-      <div className="col-start-1 col-end-3 flex w-full items-center justify-center gap-2">
+      <div className=" flex w-full flex-col items-center justify-center">
+        <div className="h-[16px] pb-1.5"></div>
+        <span className="pointer-events-none block w-full origin-top-left pb-1.5 text-left text-xs font-semibold text-primary text-primary/50 transition-all !duration-200 !ease-out will-change-auto group-data-[invalid=true]:!text-error-strong motion-reduce:transition-none"></span>
         <Select
           isDisabled={
             selectBusiness === "" || selectBusiness === optionsBusiness[1]
