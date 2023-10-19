@@ -40,6 +40,7 @@ export default function FormSignUp() {
   });
 
   const { firstStep, secondStep, completeSecondStep } = stepsState();
+  const { logoFile, setNewData } = useStepExample();
 
   const onSubmit = async (data: FieldValues) => {
     if (step == 1) {
@@ -49,7 +50,8 @@ export default function FormSignUp() {
       }
     }
     if (step == 2) {
-      nextStep(1, data);
+      const dataWithImage = { ...data, logoCompany: logoFile };
+      nextStep(1, dataWithImage);
       completeSecondStep();
     }
     if (step == 3) {
