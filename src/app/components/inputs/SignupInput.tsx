@@ -12,6 +12,7 @@ export default function SignupInput({
   register,
   label,
   field,
+  disableOption,
   placeholder,
   errorMessage,
   errorEmail,
@@ -27,6 +28,7 @@ export default function SignupInput({
   placeholder: string;
   errorMessage: string;
   type: string;
+  disableOption?: boolean;
   errorEmail?: number | undefined;
   isVisible?: boolean;
   handleVisible?: () => void | undefined;
@@ -41,6 +43,7 @@ export default function SignupInput({
         type={isPassword ? (isVisible ? "text" : "password") : field}
         label={label}
         id={field}
+        isDisabled={disableOption}
         labelPlacement="outside"
         placeholder={placeholder}
         endContent={
