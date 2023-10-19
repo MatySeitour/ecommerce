@@ -1,10 +1,14 @@
 import { Input } from "@nextui-org/input";
 import { Tooltip } from "@nextui-org/tooltip";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { Select, SelectItem } from "@nextui-org/select";
-import { Avatar } from "@nextui-org/react";
+import { Avatar, Button } from "@nextui-org/react";
 import { CameraIcon } from "@/app/components/CameraIcon";
+import Image from "next/image";
+import { useStepExample } from "@/app/store/stepsStore";
+import SignupInput from "../inputs/SignupInput";
+import SelectInput from "../SelectsForm/SelectInput";
 
 export default function FormSecondStep({
   step,
@@ -28,8 +32,11 @@ export default function FormSecondStep({
     "Sabado",
     "Domingo",
   ];
-  const [file, setFile] = useState<File>();
+
+  const [messageImageError, setMessageImageError] = useState<boolean>(false);
   const [selectBusiness, setSelectBusiness] = useState<string>("");
+
+  const { logoFile, setFileData } = useStepExample();
 
   return (
     <div
@@ -39,80 +46,91 @@ export default function FormSecondStep({
           : `invisible absolute grid translate-x-[40rem] grid-cols-2 gap-4 transition-all`
       }
     >
-      <div className="flex items-center gap-4">
-        <Avatar
-          showFallback
-          src="https://images.unsplash.com/broken"
-          fallback={
-            <CameraIcon
-              className="h-6 w-6 animate-pulse text-default-500"
-              fill="currentColor"
-              size={20}
-            />
-          }
-        />
-        <Avatar
-          showFallback
-          name="Jane"
-          src="https://images.unsplash.com/broken"
-        />
-        <Avatar name="Joe" src="https://images.unsplash.com/broken" />
-      </div>
-      {/* <div className="flex items-center gap-2">
-        <div className="flex flex-col">
-          <label className="block origin-top-left pb-1.5 text-xs font-semibold text-primary transition-all !duration-200 !ease-out will-change-auto group-data-[invalid=true]:!text-error-strong motion-reduce:transition-none">
-            Logo de tu negocio
-          </label>
+      <div className="flex flex-col items-start justify-start gap-2">
+        <label className="block origin-top-left pb-1.5 text-xs font-semibold text-primary transition-all !duration-200 !ease-out will-change-auto group-data-[invalid=true]:!text-error-strong motion-reduce:transition-none">
+          Selecciona el logo de tu negocio
+        </label>
+        <div className="flex flex-row items-center justify-center gap-4">
           <label
             htmlFor="logoCompany"
-            className="flex w-56 cursor-pointer flex-row items-center justify-center gap-2 rounded-md border border-white/30 bg-details-medium p-1 text-sm text-white outline-none placeholder:text-white focus:border-white"
+            className="flex h-24 w-24 cursor-pointer flex-row items-center justify-center gap-2 overflow-hidden rounded-full border border-white/30 bg-white p-1 text-sm text-white outline-none placeholder:text-white focus:border-white"
           >
-            {file ? (
-              <span className="text-white">{file.name}</span>
+            {logoFile ? (
+              <Image
+                src={`${URL.createObjectURL(logoFile)}`}
+                alt="user"
+                width={500}
+                height={500}
+                className="object-cover"
+              />
             ) : (
-              <div className="flex flex-row items-center justify-center gap-2">
-                <span>Adjuntar logo</span>
-              </div>
+              <Image src={"/cookies.png"} alt="user" width={500} height={500} />
             )}
           </label>
 
           <input
             {...register("logoCompany", { required: "social is required" })}
             id="logoCompany"
+            accept="image/png"
+            onChange={(e) => {
+              if (e.target.files) {
+                if (
+                  e?.target?.files[0]?.type != "image/png" &&
+                  e?.target?.files[0]?.type != undefined
+                ) {
+                  setMessageImageError(true);
+                } else {
+                  if (e?.target?.files[0]?.name == undefined) {
+                    setFileData(logoFile);
+                  } else {
+                    setFileData(e.target.files[0]);
+                    setMessageImageError(false);
+                  }
+                }
+              }
+            }}
             type="file"
             className="hidden w-80 bg-black text-white"
             placeholder="John Doe"
             name="logoCompany"
           />
+          <div className="flex flex-col gap-2">
+            <Button
+              onClick={() => setFileData("")}
+              // isLoading={isSubmitting ? true : false}
+              isDisabled={logoFile ? false : true}
+              className="w-full max-w-[8rem] bg-error-medium text-[0.7rem] text-white hover:bg-error-medium/90"
+              radius="sm"
+              size="sm"
+              type="button"
+            >
+              Eliminar foto
+            </Button>
+            <span className="text-[0.66rem] text-secondary">
+              *Sólo imagenes con formato png.
+            </span>
+          </div>
         </div>
-        {!errors?.logoCompany && (
-          <div className="translate-y-2.5">
-            <Tooltip
-              className="top-0 max-w-[15rem] bg-white text-center text-secondary"
-              content={`Este campo es opcional, puedes añadir el logo de tu negocio más tarde.`}
-            >
-              <div>
-                <IoMdInformationCircleOutline className="h-6 w-6 text-secondary" />
-              </div>
-            </Tooltip>
-          </div>
+        {messageImageError && (
+          <span className="w-full text-center text-sm text-error-medium">
+            Solo se permite imagenes con formato png.
+          </span>
         )}
+      </div>
 
-        {errors?.logoCompany && (
-          <div className="translate-y-2.5">
-            <Tooltip
-              className="top-0 max-w-[15rem] bg-error-medium text-center text-white"
-              content={`${errors?.logoCompany?.message}`}
-            >
-              <div>
-                <IoMdInformationCircleOutline className="h-6 w-6 text-error-medium" />
-              </div>
-            </Tooltip>
-          </div>
-        )}
-      </div> */}
-
-      <div className="flex items-center gap-2">
+      <SelectInput
+        step={step}
+        errors={errors}
+        register={register}
+        label="Tipo de negocio"
+        field="businessType"
+        type="text"
+        errorMessage={errors?.businessType?.message}
+        selectOption={selectBusiness}
+        setSelectOption={setSelectBusiness}
+        options={["Tengo un negocio fisico", "Tengo un negocio digital"]}
+      />
+      {/* <div className="flex items-center gap-2">
         <div className="w-full pt-6">
           <div className="flex h-auto w-full flex-wrap items-center justify-center gap-2 pr-2 md:flex-nowrap">
             <Select
@@ -164,9 +182,25 @@ export default function FormSecondStep({
             </Tooltip>
           </div>
         )}
-      </div>
+      </div> */}
 
-      <div className="flex items-center justify-center gap-2">
+      <SignupInput
+        step={step}
+        errors={errors}
+        register={register}
+        label="Direccón de tu negocio"
+        field="businessAddress"
+        placeholder="Escribe la Direccón de tu negocio"
+        type="text"
+        errorMessage={errors?.businessAddress?.message}
+        disableOption={
+          selectBusiness === "" || selectBusiness === optionsBusiness[1]
+            ? true
+            : false
+        }
+      />
+
+      {/* <div className="flex items-center justify-center gap-2">
         <Input
           type="businessAddress"
           {...register("businessAddress")}
@@ -206,7 +240,7 @@ export default function FormSecondStep({
             </Tooltip>
           </div>
         )}
-      </div>
+      </div> */}
 
       <div className=" flex w-full flex-col items-center justify-center">
         <div className="h-[16px] pb-1.5"></div>
