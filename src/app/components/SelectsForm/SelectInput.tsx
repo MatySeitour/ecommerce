@@ -40,11 +40,11 @@ export default function SelectInput({
           <Select
             classNames={{
               trigger: ["min-h-4 max-h-8 w-full rounded-[4px] p-2"],
-              value: ["text-xs text-primary -translate-y-[.5rem]"],
+              value: ["text-sm text-primary -translate-y-[.5rem]"],
               label: [
                 "text-xs group-data-[filled=true]:-translate-y-7 group-data-[filled=true]:-translate-x-2 group-data-[filled=true]:text-primary group-data-[filled=true]:text-xs group-data-[filled=true]:font-semibold",
               ],
-              //   "text-primary font-semibold text-xs group-data-[invalid=true]:!text-error-strong",
+              //   "text-primary font-semibold text-sm group-data-[invalid=true]:!text-error-strong",
             }}
             {...register(`${field}`, { required: "social is required" })}
             label={label}
