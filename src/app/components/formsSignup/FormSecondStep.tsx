@@ -23,6 +23,7 @@ export default function FormSecondStep({
     "Tengo un negocio fisico",
     "Tengo un negocio digital",
   ];
+
   const dateBusinessOpen = [
     "Lunes",
     "Martes",
@@ -47,9 +48,6 @@ export default function FormSecondStep({
       }
     >
       <div className="flex flex-col items-start justify-start gap-2">
-        <label className="block origin-top-left pb-1.5 text-xs font-semibold text-primary transition-all !duration-200 !ease-out will-change-auto group-data-[invalid=true]:!text-error-strong motion-reduce:transition-none">
-          Selecciona el logo de tu negocio
-        </label>
         <div className="flex flex-row items-center justify-center gap-4">
           <label
             htmlFor="logoCompany"
@@ -95,6 +93,9 @@ export default function FormSecondStep({
             name="logoCompany"
           />
           <div className="flex flex-col gap-2">
+            <label className="block origin-top-left pb-1.5 text-xs font-semibold text-primary transition-all !duration-200 !ease-out will-change-auto group-data-[invalid=true]:!text-error-strong motion-reduce:transition-none">
+              Seleccionar logo
+            </label>
             <Button
               onClick={() => setFileData("")}
               // isLoading={isSubmitting ? true : false}
@@ -122,13 +123,32 @@ export default function FormSecondStep({
         step={step}
         errors={errors}
         register={register}
-        label="Tipo de negocio"
+        label="Provincia donde se ubica"
         field="businessType"
         type="text"
         errorMessage={errors?.businessType?.message}
         selectOption={selectBusiness}
         setSelectOption={setSelectBusiness}
-        options={["Tengo un negocio fisico", "Tengo un negocio digital"]}
+        options={["Buenos Aires", "Córdoba", "Santa Fe", "Mendoza", "Tucumán"]}
+      />
+
+      <SelectInput
+        step={step}
+        errors={errors}
+        register={register}
+        label="Selecciona el partido donde se ubica"
+        field="businessType"
+        type="text"
+        errorMessage={errors?.businessType?.message}
+        selectOption={selectBusiness}
+        setSelectOption={setSelectBusiness}
+        options={[
+          "La Plata",
+          "Mar del Plata",
+          "Bahía Blanca",
+          "Tandil",
+          "San Isidro",
+        ]}
       />
       {/* <div className="flex items-center gap-2">
         <div className="w-full pt-6">
@@ -260,6 +280,49 @@ export default function FormSecondStep({
           }}
           {...register("businessOpen", { required: "social is required" })}
           label="Horario de apertura"
+          className="max-w-xs"
+        >
+          {dateBusinessOpen.map((option) => (
+            <SelectItem
+              onClick={() => setSelectBusiness(option)}
+              key={option}
+              value={option}
+            >
+              {option}
+            </SelectItem>
+          ))}
+        </Select>
+        {errors.businessOpen && (
+          <div className="translate-y-2.5">
+            <Tooltip
+              className="top-0 max-w-[15rem] bg-error-medium text-center text-white"
+              content={`${errors?.businessOpen?.message}`}
+            >
+              <div>
+                <IoMdInformationCircleOutline className="h-6 w-6 text-error-medium" />
+              </div>
+            </Tooltip>
+          </div>
+        )}
+      </div>
+      <div className=" flex w-full flex-col items-center justify-center">
+        <div className="h-[16px] pb-1.5"></div>
+        <span className="pointer-events-none block w-full origin-top-left pb-1.5 text-left text-xs font-semibold text-primary text-primary/50 transition-all !duration-200 !ease-out will-change-auto group-data-[invalid=true]:!text-error-strong motion-reduce:transition-none"></span>
+        <Select
+          isDisabled={
+            selectBusiness === "" || selectBusiness === optionsBusiness[1]
+              ? true
+              : false
+          }
+          classNames={{
+            trigger: ["min-h-4 max-h-8 w-full rounded-[4px] px-2"],
+            value: ["text-xs text-primary -translate-y-[.5rem]"],
+            label: [
+              "text-xs group-data-[filled=true]:-translate-y-7 group-data-[filled=true]:-translate-x-2 group-data-[filled=true]:text-primary group-data-[filled=true]:text-xs group-data-[filled=true]:font-semibold",
+            ],
+          }}
+          {...register("businessOpen", { required: "social is required" })}
+          label="Horario de cierre"
           className="max-w-xs"
         >
           {dateBusinessOpen.map((option) => (
