@@ -28,58 +28,43 @@ export default function FormFirstStep({
         }
       >
         <SignupInput
-          step={step}
-          errors={errors}
           register={register}
           label="Nombre del negocio"
           field="company"
           placeholder="Escribe el nombre de tu negocio"
-          type="text"
           errorMessage={errors?.company?.message}
         />
         <SignupInput
-          step={step}
-          errors={errors}
           register={register}
           label="Correo Electrónico"
           field="email"
           placeholder="Escribe el correo electrónico"
           errorMessage={errors?.email?.message}
-          type="email"
           errorEmail={errorEmail}
         />
         <SignupInput
-          step={step}
-          errors={errors}
           register={register}
           label="Contraseña"
           field="password"
           placeholder="Escribe una contraseña"
-          type="password"
           errorMessage={errors?.password?.message}
           isVisible={isVisible}
           handleVisible={toggleVisibility}
         />
         <SignupInput
-          step={step}
-          errors={errors}
           register={register}
           label="Confirmar contraseña"
           field="confirmPassword"
           placeholder="Vuelve a escribir la contraseña"
-          type="password"
           errorMessage={errors?.confirmPassword?.message}
           isVisible={isVisible}
           handleVisible={toggleVisibility}
         />
         <SignupInput
-          step={step}
-          errors={errors}
           register={register}
           label="Numero de teléfono - celular"
           field="phone"
           placeholder="Escribe un numero de teléfono"
-          type="text"
           errorMessage={errors?.phone?.message}
         />
       </div>
