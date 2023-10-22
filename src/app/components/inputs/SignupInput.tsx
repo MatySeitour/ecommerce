@@ -7,8 +7,6 @@ import {
 } from "react-icons/io";
 
 export default function SignupInput({
-  step,
-  errors,
   register,
   label,
   field,
@@ -16,18 +14,14 @@ export default function SignupInput({
   placeholder,
   errorMessage,
   errorEmail,
-  type,
   isVisible,
   handleVisible,
 }: {
-  step: number;
-  errors: any;
   register: any;
   field: string;
   label: string;
   placeholder: string;
   errorMessage: string;
-  type: string;
   disableOption?: boolean;
   errorEmail?: number | undefined;
   isVisible?: boolean;
