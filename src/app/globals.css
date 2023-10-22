@@ -25,3 +25,8 @@
 .animation-delay__300 {
   animation-delay: 4s;
 }
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  background: none;
+  display: none;
+}
