@@ -40,7 +40,7 @@ export default function FormSignUp() {
   });
 
   const { firstStep, secondStep, completeSecondStep } = stepsState();
-  const { logoFile, setNewData } = useStepExample();
+  const { logoFile } = useStepExample();
 
   const onSubmit = async (data: FieldValues) => {
     if (step == 1) {
@@ -79,8 +79,8 @@ export default function FormSignUp() {
       <div
         className={
           step != 4
-            ? "visible flex h-full w-full flex-col items-center justify-center gap-4 px-6 py-2 transition-all"
-            : "invisible hidden h-full w-full flex-col items-center justify-center gap-4 px-6 py-2 transition-all"
+            ? "visible flex h-full w-full flex-col items-center justify-center gap-4 px-10 py-2 transition-all"
+            : "invisible hidden h-full w-full flex-col items-center justify-center gap-4 px-10 py-2 transition-all"
         }
       >
         <Steps />
@@ -97,8 +97,12 @@ export default function FormSignUp() {
             saltearte todos estos pasos.
           </div>
         )} */}
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <div className="relative h-60 overflow-hidden px-2">
+        <form
+          noValidate
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-4"
+        >
+          <div className="relative h-64 overflow-hidden">
             {step >= 1 && (
               <FormFirstStep
                 step={step}
