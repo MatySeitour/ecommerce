@@ -53,6 +53,7 @@ const config: Config = {
               strong: "#1d4ed8",
             },
             error: {
+              low: "rgba(339% 92% 95%)",
               medium: "#f44336",
               strong: "#ff0000",
             },
