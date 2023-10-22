@@ -1,37 +1,23 @@
 "use client";
 import { Select, SelectItem } from "@nextui-org/select";
 import { Tooltip } from "@nextui-org/tooltip";
-import { useState } from "react";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 
 export default function SelectInput({
-  step,
-  errors,
   register,
   label,
   field,
-  disableOption,
   errorMessage,
-  type,
-  isVisible,
-  handleVisible,
-  selectOption,
   setSelectOption,
   options,
 }: {
-  step: number;
-  errors: any;
   register: any;
-  field: string;
   label: string;
+  step: number;
+  field: string;
   errorMessage: string;
-  type: string;
-  selectOption: string;
   setSelectOption: (option: any) => void;
   options: any[];
-  disableOption?: boolean;
-  isVisible?: boolean;
-  handleVisible?: () => void | undefined;
 }) {
   return (
     <div className="flex items-center gap-2">
@@ -39,7 +25,11 @@ export default function SelectInput({
         <div className="flex h-auto w-full flex-wrap items-center justify-center gap-2 pr-2 md:flex-nowrap">
           <Select
             classNames={{
-              trigger: ["min-h-4 max-h-8 w-full rounded-[4px] p-2"],
+              trigger: [
+                `min-h-4 max-h-8 w-full rounded-[4px] p-2 group-data-[focus=true]:border-details-low rounded-[4px] min-h-4 max-h-8 w-full group-data-[hover=true]:bg-white/30 group-data-[focus-visible=true]:ring-0 group-data-[focus-visible=true]:ring-offset-0 ${
+                  errorMessage && `bg-error-low text-error-medium`
+                }`,
+              ],
               value: ["text-sm text-primary -translate-y-[.5rem]"],
               label: [
                 "text-xs group-data-[filled=true]:-translate-y-7 group-data-[filled=true]:-translate-x-2 group-data-[filled=true]:text-primary group-data-[filled=true]:text-xs group-data-[filled=true]:font-semibold",
@@ -60,11 +50,11 @@ export default function SelectInput({
               </SelectItem>
             ))}
           </Select>
-          {errors.businessType && (
+          {errorMessage && (
             <div className="">
               <Tooltip
                 className="top-0 max-w-[15rem] bg-error-medium text-center text-white"
-                content={`${errors?.businessType?.message}`}
+                content={`${errorMessage}`}
               >
                 <div>
                   <IoMdInformationCircleOutline className="h-6 w-6 text-error-medium" />
