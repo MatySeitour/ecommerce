@@ -1,13 +1,12 @@
 "use client";
 
 import multiForm from "../hooks/multiForm";
-import { stepsState, useStepExample } from "../store/stepsStore";
+import { stepsState, useStep } from "../store/stepsStore";
 import { BsCheckCircle } from "react-icons/bs";
 
 export default function Steps() {
-  const { step } = useStepExample();
+  const { step } = useStep();
   const { firstStep, secondStep, thirdStep } = stepsState();
-  console.log(step);
 
   return (
     <div className="flex h-20 w-full items-center justify-center">
