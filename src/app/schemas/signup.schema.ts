@@ -47,34 +47,31 @@ export const secondStepSchema = z.object({
     .optional(),
 
   businessAddress: z.string().refine((province) => {
-    console.log(province.length);
     return province.length != 0;
   }, "Escribe la dirección de tu negocio."),
 
   businessProvince: z.string().refine((province) => {
-    console.log(province.length);
     return province.length != 0;
   }, "Selecciona una provincia."),
 
   businessCity: z.string().refine((city) => {
-    console.log(city.length);
     return city.length != 0;
   }, "Selecciona una ciudad."),
 
   businessOpen: z.string().refine((business) => {
-    console.log(business.length);
     return business.length != 0;
   }, "Selecciona un dia."),
 
   businessClosed: z.string().refine((business) => {
-    console.log(business.length);
     return business.length != 0;
   }, "Selecciona un dia."),
 
   businessOpeningHours: z
     .string()
     .regex(
-      new RegExp(/^(0[1-9]|1[0-2]):[0-5][0-9]$/),
+      new RegExp(
+        /^(([0-9]{1})|([0-1]{1}[0-9]{1})|([2]{1}[0-3]{1}))(([:]{1})?)(([0-5]{1}[0-9]?)?)$/,
+      ),
       "Selecciona un horario.",
     ),
   // .refine((openHour) => {
@@ -85,7 +82,9 @@ export const secondStepSchema = z.object({
   businessClosedHours: z
     .string()
     .regex(
-      new RegExp(/^(0[1-9]|1[0-2]):[0-5][0-9]$/),
+      new RegExp(
+        /^(([0-9]{1})|([0-1]{1}[0-9]{1})|([2]{1}[0-3]{1}))(([:]{1})?)(([0-5]{1}[0-9]?)?)$/,
+      ),
       "Selecciona un horario.",
     ),
 });
