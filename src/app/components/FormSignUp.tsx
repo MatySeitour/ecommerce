@@ -8,10 +8,11 @@ import multiForm from "../hooks/multiForm";
 import FormFirstStep from "./formsSignup/FormFirstStep";
 import FormSecondStep from "./formsSignup/FormSecondStep";
 import { firstStepSchema, secondStepSchema } from "../schemas/signup.schema";
-import { stepsState, useStepExample } from "../store/stepsStore";
-import { HiMiniCheckCircle } from "react-icons/hi2";
-import { motion } from "framer-motion";
+import { stepsState, useStep } from "../store/stepsStore";
 import Steps from "./Steps";
+import { useState } from "react";
+import AccountSuccess from "./AccountSuccess";
+import EmailOtp from "./EmailOtp";
 
 export default function FormSignUp() {
   const router = useRouter();
@@ -40,7 +41,7 @@ export default function FormSignUp() {
   });
 
   const { firstStep, secondStep, completeSecondStep } = stepsState();
-  const { logoFile } = useStepExample();
+  const { logoFile } = useStep();
 
   const onSubmit = async (data: FieldValues) => {
     if (step == 1) {
@@ -102,7 +103,7 @@ export default function FormSignUp() {
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col gap-4"
         >
-          <div className="relative h-64 overflow-hidden">
+          <div className="relative flex h-64 items-center justify-center overflow-hidden">
             {step >= 1 && (
               <FormFirstStep
                 step={step}
@@ -179,39 +180,7 @@ export default function FormSignUp() {
             : "h-0 w-0"
         }
       >
-        {step == 4 && (
-          <motion.div
-            initial={{ translateY: 1000 }}
-            animate={{ translateY: 0 }}
-            transition={{
-              type: "spring",
-              stiffness: 260,
-              damping: 20,
-            }}
-            className={"h-[300px] w-[500px] rounded-md bg-white"}
-          >
-            <div className="h-full w-full">
-              <div className="flex h-full w-full flex-col items-center justify-center gap-3">
-                <HiMiniCheckCircle className="h-24 w-24 text-green-400" />
-                <div></div>
-                <p className="mb-4 text-center text-xl font-medium text-primary">
-                  ¡Tu cuenta fue creada con éxito!
-                </p>
-                <Button
-                  disabled={isSubmitting}
-                  type="submit"
-                  color="primary"
-                  variant="shadow"
-                  className="w-full max-w-[18rem] bg-success text-white hover:bg-success/90"
-                  radius="sm"
-                  isLoading={isSubmitting ? true : false}
-                >
-                  {isSubmitting ? "" : "Iniciar sesión"}
-                </Button>
-              </div>
-            </div>
-          </motion.div>
-        )}
+        {step == 4 && <EmailOtp />}
       </div>
     </div>
   );
