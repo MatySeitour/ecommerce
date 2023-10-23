@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { useState } from "react";
 import { FieldValues } from "react-hook-form";
-import { stepsState, useStepExample } from "../store/stepsStore";
+import { stepsState, useStep } from "../store/stepsStore";
 
 interface SignUpData {
   company?: string;
@@ -11,7 +11,7 @@ interface SignUpData {
   phone?: number;
 }
 
-export default function multiForm() {
+export default function useMultiForm() {
   // const [step, increment] = useState<number>(1);
   const [values, setValues] = useState<SignUpData>();
   const [errorEmail, setErrorEmail] = useState<number | undefined>(0);
@@ -19,7 +19,7 @@ export default function multiForm() {
 
   const { firstStep, secondStep, thirdStep, completeFirstStep } = stepsState();
 
-  const { step, increment, decrement, skip } = useStepExample();
+  const { step, increment, decrement, skip } = useStep();
 
   function addValuesForm(data: FieldValues | undefined) {
     setValues(() => {
@@ -35,7 +35,6 @@ export default function multiForm() {
   }
 
   function backStep(stepValue: number) {
-    console.log(stepValue);
     if (stepValue > 1) {
       decrement(1);
     }
