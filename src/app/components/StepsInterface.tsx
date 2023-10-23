@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useStepExample } from "../store/stepsStore";
+import { useStep } from "../store/stepsStore";
 import { Button } from "@nextui-org/button";
 import { motion } from "framer-motion";
 
@@ -26,8 +26,7 @@ export default function StepsInterface() {
     },
   };
 
-  // const { stepsCompleteState } = multiForm();
-  const { step } = useStepExample();
+  const { step } = useStep();
 
   return (
     <article
@@ -41,7 +40,9 @@ export default function StepsInterface() {
         <motion.h2
           initial={{ translateY: 10 }}
           animate={{ translateY: 0 }}
-          className="px-2 text-3xl font-extrabold text-primary"
+          className={`px-2 text-3xl font-extrabold text-primary ${
+            step == 4 && `hidden`
+          }`}
         >
           Nombre de la app
         </motion.h2>
@@ -55,21 +56,15 @@ export default function StepsInterface() {
         {["Crea.", "Administra.", "Sueña."].map((index) => (
           <motion.li
             key={index}
-            className="px-2 text-2xl font-extrabold text-white"
+            className={`px-2 text-2xl font-extrabold text-white ${
+              step == 4 && `hidden`
+            }`}
             variants={item}
           >
             {index}
           </motion.li>
         ))}
-        {/* <span className="">Crea.</span> */}
       </motion.ul>
-      {/* <div className="flex w-full flex-col justify-start text-start">
-        <span className="px-2 text-2xl font-extrabold text-white">Crea.</span>
-        <span className="px-2 text-2xl font-extrabold text-white">
-          Administra.
-        </span>
-        <span className="px-2 text-2xl font-extrabold text-white">Sueña.</span>
-      </div> */}
       <div className="h-60  w-full">
         <Image
           className="h-full w-full object-cover"
