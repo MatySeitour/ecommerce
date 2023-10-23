@@ -4,7 +4,7 @@ interface StepValue {
   step: number;
   increment: (value: number) => void;
   decrement: (value: number) => void;
-  logoFile: File | string;
+  logoFile: any;
   setFileData: (value: File | string) => void;
   skip: () => void;
 }
@@ -18,8 +18,8 @@ interface StepsState {
   completeThirdStep: () => void;
 }
 
-export const useStepExample = create<StepValue>((set) => ({
-  step: 2,
+export const useStep = create<StepValue>((set) => ({
+  step: 1,
   logoFile: "",
   increment: (value: number) =>
     set((state: any) => ({ step: state.step + value })),
