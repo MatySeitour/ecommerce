@@ -1,11 +1,5 @@
-import { GetStaticProps } from "next";
 import { CreateCategory } from "./components/CreateCategories";
 import { SearchHome } from "./components/SearchHome";
-import RootLayout from "./layout";
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { Nav } from "./components/Navs/Nav";
-import { cookies } from "next/headers";
 
 export default async function Home() {
   return (
