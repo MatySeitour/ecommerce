@@ -15,7 +15,6 @@ export default function TimeInput({
   const [openHour, setOpenHour] = useState("");
 
   const handleOpenHourChange = (event: any) => {
-    console.log(event.target.value);
     setOpenHour(event.target.value);
   };
   return (
