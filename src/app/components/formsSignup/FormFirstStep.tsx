@@ -24,7 +24,7 @@ export default function FormFirstStep({
         className={
           step === 1
             ? `visible absolute grid w-full translate-x-0 grid-cols-2 gap-4 pr-4 transition-all`
-            : `invisible absolute grid -translate-x-96 grid-cols-2 gap-4 transition-all`
+            : `invisible absolute grid -translate-x-[40rem] grid-cols-2 gap-4 transition-all`
         }
       >
         <SignupInput
