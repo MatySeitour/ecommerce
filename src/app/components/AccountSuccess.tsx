@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import OtpInput from "react-otp-input";
 import { Button } from "@nextui-org/button";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function AccountSuccess() {
   const [otp, setOtp] = useState("");
@@ -25,25 +26,13 @@ export default function AccountSuccess() {
           <p className="mb-4 text-center text-xl font-medium text-primary">
             ¡Tu cuenta fue creada con éxito!
           </p>
-          <OtpInput
-            containerStyle={`flex justify-center items-center w-40 gap-2`}
-            value={otp}
-            onChange={setOtp}
-            numInputs={4}
-            inputStyle={`h-12 !w-10 rounded-md border-2 border-details-low  text-center text-lg outline-none text-primary`}
-            renderInput={(props) => <input {...props} />}
-          />
-          {/* <Button
-            disabled={isSubmitting}
-            type="submit"
-            color="primary"
-            variant="shadow"
-            className="w-full max-w-[18rem] bg-success text-white hover:bg-success/90"
-            radius="sm"
-            isLoading={isSubmitting ? true : false}
+
+          <Link
+            href={"/login"}
+            className="w-full max-w-[18rem] rounded-md bg-success p-2 text-center text-white shadow-xl hover:bg-success/90"
           >
-            {isSubmitting ? "" : "Iniciar sesión"}
-          </Button> */}
+            {`Iniciar sesión`}
+          </Link>
         </div>
       </div>
     </motion.div>
