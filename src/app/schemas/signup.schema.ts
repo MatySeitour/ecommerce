@@ -46,27 +46,27 @@ export const secondStepSchema = z.object({
     }, "Sólo se permiten imagenes con la extensión .png")
     .optional(),
 
-  businessAddress: z.string().refine((province) => {
-    return province.length != 0;
+  businessAddress: z.string().refine((address) => {
+    return address.length != 0;
   }, "Escribe la dirección de tu negocio."),
 
-  businessProvince: z.string().refine((province) => {
+  province: z.string().refine((province) => {
     return province.length != 0;
   }, "Selecciona una provincia."),
 
-  businessCity: z.string().refine((city) => {
+  city: z.string().refine((city) => {
     return city.length != 0;
   }, "Selecciona una ciudad."),
 
-  businessOpen: z.string().refine((business) => {
+  openWeek: z.string().refine((business) => {
     return business.length != 0;
   }, "Selecciona un dia."),
 
-  businessClosed: z.string().refine((business) => {
+  closedWeek: z.string().refine((business) => {
     return business.length != 0;
   }, "Selecciona un dia."),
 
-  businessOpeningHours: z
+  openTime: z
     .string()
     .regex(
       new RegExp(
@@ -79,7 +79,7 @@ export const secondStepSchema = z.object({
   //   return openHour.length != 0;
   // }, "Sólo se permiten imagenes con la extensión .png"),
 
-  businessClosedHours: z
+  closedTime: z
     .string()
     .regex(
       new RegExp(
