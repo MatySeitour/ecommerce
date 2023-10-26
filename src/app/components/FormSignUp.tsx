@@ -10,9 +10,11 @@ import FormSecondStep from "./formsSignup/FormSecondStep";
 import { firstStepSchema, secondStepSchema } from "../schemas/signup.schema";
 import { stepsState, useStep } from "../store/stepsStore";
 import Steps from "./Steps";
-import { useState } from "react";
+import { motion } from "framer-motion";
+
 import AccountSuccess from "./AccountSuccess";
 import EmailOtp from "./EmailOtp";
+import SendMail from "./SendMail";
 
 export default function FormSignUp() {
   const router = useRouter();
@@ -40,6 +42,29 @@ export default function FormSignUp() {
     resolver: zodResolver(step === 1 ? firstStepSchema : secondStepSchema),
   });
 
+  const containerSignUpAnimation = {
+    visible: {
+      transition: {
+        ease: [0, 0.71, 0.2, 1.01],
+        delayChildren: 0.1,
+        staggerChildren: 0.2,
+        duration: 0.5,
+      },
+    },
+  };
+
+  const itemAnimation = {
+    hidden: { y: 60, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        ease: [0, 0.71, 0.2, 1.01],
+        duration: 0.5,
+      },
+    },
+  };
+
   const { firstStep, secondStep, completeSecondStep } = stepsState();
   const { logoFile } = useStep();
 
@@ -57,14 +82,18 @@ export default function FormSignUp() {
     }
     if (step == 3) {
       addValuesForm(data);
-      const a = await sendData(values);
-      console.log(a);
+      if (values != undefined) {
+        const a = await sendData(values);
+        console.log(a);
+      }
     }
     if (skipState) {
       try {
         skipSignUp(data);
-        const a = await sendData(values);
-        console.log(a);
+        if (values != undefined) {
+          const a = await sendData(values);
+          console.log(a);
+        }
         // skip();
       } catch (e) {
         console.error(e);
@@ -77,7 +106,10 @@ export default function FormSignUp() {
 
   return (
     <div className={`h-full w-full overflow-hidden`}>
-      <div
+      <motion.div
+        variants={containerSignUpAnimation}
+        initial="hidden"
+        animate="visible"
         className={
           step != 4
             ? "visible flex h-full w-full flex-col items-center justify-center gap-4 px-10 py-2 transition-all"
@@ -86,24 +118,33 @@ export default function FormSignUp() {
       >
         <Steps />
         {/* <span className="text-sm text-secondary">{`Paso ${step} / 3`}</span> */}
-        <h2 className="text-3xl font-extrabold text-primary">
+        <motion.h2
+          variants={itemAnimation}
+          className="text-3xl font-extrabold text-primary"
+        >
           Crea tu negocio
-        </h2>
-        <h3 className="text-lg font-medium text-primary">
+        </motion.h2>
+        <motion.h3
+          variants={itemAnimation}
+          className="text-lg font-medium text-primary"
+        >
           Crea el perfil de tu negocio online{" "}
-        </h3>
+        </motion.h3>
         {/* {step != 1 && (
           <div className="max-w-sm text-xs font-semibold text-secondary">
             Si desear agregar más datos sobre tu negocio más tarde, puedes
             saltearte todos estos pasos.
           </div>
         )} */}
-        <form
+        <motion.form
           noValidate
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col gap-4"
         >
-          <div className="relative flex h-64 items-center justify-center overflow-hidden">
+          <motion.div
+            variants={itemAnimation}
+            className="relative flex h-64 items-center justify-center overflow-hidden"
+          >
             {step >= 1 && (
               <FormFirstStep
                 step={step}
@@ -116,7 +157,7 @@ export default function FormSignUp() {
             {step >= 1 && (
               <FormSecondStep step={step} errors={errors} register={register} />
             )}
-          </div>
+          </motion.div>
           <span
             className={`text-center text-primary opacity-0 transition-opacity ${
               step > 1 && `opacity-100 transition-opacity`
@@ -125,20 +166,23 @@ export default function FormSignUp() {
             Si lo deseas, puedes omitir los pasos siguientes para completarlos
             más tarde.
           </span>
-          <div className="text-center">
+          <motion.div variants={itemAnimation} className="text-center">
             <p className="text-xs">
               Esta información se guardará de forma segura según{" "}
               <b className="underline">
                 los términos de servicio y la política de privacidad.
               </b>
             </p>
-          </div>
+          </motion.div>
           {/* {!errorServer && (
             <div className="text-2xl text-error-medium">
               Lo sentimos, estamos teniendo problemas
             </div>
           )} */}
-          <div className="flex flex-row items-center justify-center gap-4">
+          <motion.div
+            variants={itemAnimation}
+            className="flex flex-row items-center justify-center gap-4"
+          >
             <Button
               className={`bg-white text-details-medium hover:bg-white/40 ${
                 step < 2 && `hidden`
@@ -170,9 +214,9 @@ export default function FormSignUp() {
                 {isSubmitting ? "" : "Omitir"}
               </Button>
             )}
-          </div>
-        </form>
-      </div>
+          </motion.div>
+        </motion.form>
+      </motion.div>
       <div
         className={
           step == 4
@@ -180,7 +224,7 @@ export default function FormSignUp() {
             : "h-0 w-0"
         }
       >
-        {step == 4 && <EmailOtp />}
+        {step == 4 && <AccountSuccess />}
       </div>
     </div>
   );
