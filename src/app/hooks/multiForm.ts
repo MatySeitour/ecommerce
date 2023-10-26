@@ -1,28 +1,35 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { stepsState, useStep } from "../store/stepsStore";
 
 interface SignUpData {
-  company?: string;
-  confirmPassword?: string | number;
-  email?: string;
-  password?: string | number;
-  phone?: number;
+  company: string;
+  confirmPassword: string | number;
+  email: string;
+  password: string | number;
+  phone: number;
+  province: string;
+  city: string;
+  businessAddress: string;
+  openWeek: string;
+  closedWeek: string;
+  openTime: string;
+  closedTime: string;
+  logo?: string;
 }
 
 export default function useMultiForm() {
-  // const [step, increment] = useState<number>(1);
   const [values, setValues] = useState<SignUpData>();
-  const [errorEmail, setErrorEmail] = useState<number | undefined>(0);
-  const [skipState, setSkipState] = useState<boolean | undefined>(false);
+  const [errorEmail, setErrorEmail] = useState<number>(0);
+  const [skipState, setSkipState] = useState<boolean>(false);
 
-  const { firstStep, secondStep, thirdStep, completeFirstStep } = stepsState();
+  const { completeFirstStep } = stepsState();
 
   const { step, increment, decrement, skip } = useStep();
 
-  function addValuesForm(data: FieldValues | undefined) {
-    setValues(() => {
+  function addValuesForm(data: FieldValues) {
+    setValues((): any => {
       return { ...values, ...data };
     });
   }
@@ -56,7 +63,6 @@ export default function useMultiForm() {
       return true;
     } catch (error: any) {
       if (error?.response?.data == "Este mail no es válido") {
-        // console.log(error?.response?.data == "Este mail no es válido");
         setErrorEmail(error?.response?.status);
         console.error(error?.response);
         return true;
@@ -66,38 +72,43 @@ export default function useMultiForm() {
     }
   }
 
-  function skipSignUp(data: FieldValues | undefined) {
+  function skipSignUp(data: FieldValues) {
     addValuesForm(data);
   }
 
-  async function sendData(data: SignUpData | undefined) {
+  async function sendData(data: SignUpData) {
     try {
-      // const res = await axios.postForm(
-      //   "http://localhost:3000/signup",
-      //   {
-      //     company: data?.company,
-      //     password: data?.password,
-      //     confirmPassword: data?.confirmPassword,
-      //     email: data?.email,
-      //     phone: data?.phone,
-      //   },
-      //   { withCredentials: true },
-      // );
+      const res = await axios.postForm(
+        "http://localhost:3000/signup",
+        {
+          company: data?.company,
+          password: data?.password,
+          confirmPassword: data?.confirmPassword,
+          email: data?.email,
+          phone: data?.phone,
+          province: data?.province,
+          city: data?.city,
+          businessAddress: data?.businessAddress,
+          openWeek: data?.openWeek,
+          closedWeek: data?.closedWeek,
+          openTime: data?.openTime,
+          closedTime: data?.closedTime,
+          logo: data?.logo,
+        },
+        { withCredentials: true },
+      );
       skip();
-      // console.log(res);
+      console.log(res);
     } catch (error: any) {
       setSkipState(false);
       console.error(error);
     }
   }
 
-  const isLastStep = step == 4 ? true : false;
-
   return {
     step,
     nextStep,
     backStep,
-    isLastStep,
     values,
     setValues,
     verifyEmail,
