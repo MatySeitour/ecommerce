@@ -1,14 +1,13 @@
-import { Input } from "@nextui-org/input";
 import { Tooltip } from "@nextui-org/tooltip";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { Select, SelectItem } from "@nextui-org/select";
-import { Avatar, Button } from "@nextui-org/react";
-import { CameraIcon } from "@/app/components/CameraIcon";
+import { Button } from "@nextui-org/react";
 import Image from "next/image";
-import { useStepExample } from "@/app/store/stepsStore";
+import { useStep } from "@/app/store/stepsStore";
 import SignupInput from "../inputs/SignupInput";
 import SelectInput from "../SelectsForm/SelectInput";
+import TimeInput from "../inputs/TimeInput";
 
 export default function FormSecondStep({
   step,
@@ -19,11 +18,6 @@ export default function FormSecondStep({
   errors: any;
   register: any;
 }) {
-  const optionsBusiness = [
-    "Tengo un negocio fisico",
-    "Tengo un negocio digital",
-  ];
-
   const dateBusinessOpen = [
     "Lunes",
     "Martes",
@@ -37,7 +31,7 @@ export default function FormSecondStep({
   const [messageImageError, setMessageImageError] = useState<boolean>(false);
   const [selectBusiness, setSelectBusiness] = useState<string>("");
 
-  const { logoFile, setFileData } = useStepExample();
+  const { logoFile, setFileData } = useStep();
 
   return (
     <div
@@ -94,7 +88,7 @@ export default function FormSecondStep({
           />
           <div className="flex flex-col gap-2">
             <label className="block origin-top-left pb-1.5 text-xs font-semibold text-primary transition-all !duration-200 !ease-out will-change-auto group-data-[invalid=true]:!text-error-strong motion-reduce:transition-none">
-              Seleccionar logo
+              {`Seleccionar logo (opcional)`}
             </label>
             <Button
               onClick={() => setFileData("")}
@@ -107,40 +101,36 @@ export default function FormSecondStep({
             >
               Eliminar foto
             </Button>
-            <span className="text-[0.66rem] text-secondary">
+            <span
+              className={`text-[0.66rem] text-secondary ${
+                messageImageError && `!text-error-medium`
+              }`}
+            >
               *Sólo imagenes con formato png.
             </span>
           </div>
         </div>
-        {messageImageError && (
+        {/* {messageImageError && (
           <span className="w-full text-center text-sm text-error-medium">
             Solo se permite imagenes con formato png.
           </span>
-        )}
+        )} */}
       </div>
-
       <SelectInput
         step={step}
-        errors={errors}
         register={register}
         label="Provincia donde se ubica"
-        field="businessType"
-        type="text"
-        errorMessage={errors?.businessType?.message}
-        selectOption={selectBusiness}
+        field="province"
+        errorMessage={errors?.province?.message}
         setSelectOption={setSelectBusiness}
         options={["Buenos Aires", "Córdoba", "Santa Fe", "Mendoza", "Tucumán"]}
       />
-
       <SelectInput
         step={step}
-        errors={errors}
         register={register}
         label="Selecciona el partido donde se ubica"
-        field="businessType"
-        type="text"
-        errorMessage={errors?.businessType?.message}
-        selectOption={selectBusiness}
+        field="city"
+        errorMessage={errors?.city?.message}
         setSelectOption={setSelectBusiness}
         options={[
           "La Plata",
@@ -150,22 +140,38 @@ export default function FormSecondStep({
           "San Isidro",
         ]}
       />
-      {/* <div className="flex items-center gap-2">
-        <div className="w-full pt-6">
-          <div className="flex h-auto w-full flex-wrap items-center justify-center gap-2 pr-2 md:flex-nowrap">
+      <SignupInput
+        register={register}
+        label="Direccón de tu negocio"
+        field="businessAddress"
+        placeholder="Escribe la Direccón de tu negocio"
+        errorMessage={errors?.businessAddress?.message}
+      />
+      <div className=" flex w-full flex-col items-start justify-start gap-2">
+        <label
+          className={`${errors.openWeek && `!text-error-strong`} ${
+            errors.closedWeek && `!text-error-strong`
+          } block origin-top-left text-left  text-xs font-semibold text-primary transition-all !duration-200 !ease-out will-change-auto group-data-[invalid=true]:!text-error-strong motion-reduce:transition-none`}
+        >
+          Horarios disponibles
+        </label>
+        <div className="flex w-full flex-row items-center justify-center gap-2">
+          <div className=" flex w-full  flex-col items-center justify-center">
             <Select
+              aria-label="dia de apertura"
               classNames={{
-                trigger: ["min-h-4 max-h-8 w-full rounded-[4px] px-2"],
-                value: ["text-xs text-primary -translate-y-[.5rem]"],
-                label: [
-                  "text-xs group-data-[filled=true]:-translate-y-7 group-data-[filled=true]:-translate-x-2 group-data-[filled=true]:text-primary group-data-[filled=true]:text-xs group-data-[filled=true]:font-semibold",
+                trigger: [
+                  `min-h-4 max-h-8 w-full rounded-[4px] px-2 border ${
+                    errors.openWeek &&
+                    `border-red-500 bg-error-low text-error-medium`
+                  }`,
                 ],
+                value: ["text-xs text-primary -translate-y-[.5rem]"],
               }}
-              {...register("businessType", { required: "social is required" })}
-              label="Tipo de negocio"
+              {...register("openWeek", { required: "social is required" })}
               className="max-w-xs"
             >
-              {optionsBusiness.map((option) => (
+              {dateBusinessOpen.map((option) => (
                 <SelectItem
                   onClick={() => setSelectBusiness(option)}
                   key={option}
@@ -175,178 +181,87 @@ export default function FormSecondStep({
                 </SelectItem>
               ))}
             </Select>
-            {errors.businessType && (
-              <div className="">
-                <Tooltip
-                  className="top-0 max-w-[15rem] bg-error-medium text-center text-white"
-                  content={`${errors?.businessType?.message}`}
+          </div>
+          {errors.openWeek && (
+            <div className="">
+              <Tooltip
+                className="top-0 max-w-[15rem] bg-error-medium text-center text-white"
+                content={`${errors?.openWeek?.message}`}
+              >
+                <div>
+                  <IoMdInformationCircleOutline className="h-6 w-6 text-error-medium" />
+                </div>
+              </Tooltip>
+            </div>
+          )}
+          a
+          <div className=" flex w-full flex-col items-center justify-center">
+            <Select
+              aria-label="dia de cierre"
+              classNames={{
+                trigger: [
+                  `min-h-4 max-h-8 w-full rounded-[4px] px-2 border ${
+                    errors.closedWeek &&
+                    `border-red-500 bg-error-low text-error-medium`
+                  }`,
+                ],
+                value: ["text-xs text-primary -translate-y-[.5rem]"],
+                label: [
+                  "text-xs group-data-[filled=true]:-translate-y-7 group-data-[filled=true]:-translate-x-2 group-data-[filled=true]:text-primary group-data-[filled=true]:text-xs group-data-[filled=true]:font-semibold",
+                ],
+              }}
+              {...register("closedWeek", {
+                required: "social is required",
+              })}
+              className="max-w-xs"
+            >
+              {dateBusinessOpen.map((option) => (
+                <SelectItem
+                  onClick={() => setSelectBusiness(option)}
+                  key={option}
+                  value={option}
                 >
-                  <div>
-                    <IoMdInformationCircleOutline className="h-6 w-6 text-error-medium" />
-                  </div>
-                </Tooltip>
-              </div>
-            )}
+                  {option}
+                </SelectItem>
+              ))}
+            </Select>
           </div>
+          {errors.closedWeek && (
+            <div className="">
+              <Tooltip
+                className="top-0 max-w-[15rem] bg-error-medium text-center text-white"
+                content={`${errors?.closedWeek?.message}`}
+              >
+                <div>
+                  <IoMdInformationCircleOutline className="h-6 w-6 text-error-medium" />
+                </div>
+              </Tooltip>
+            </div>
+          )}
         </div>
-
-        {errors.email && (
-          <div className="translate-y-2.5">
-            <Tooltip
-              className="top-0 max-w-[15rem] bg-error-medium text-center text-white"
-              content={`${errors?.email?.message}`}
-            >
-              <div>
-                <IoMdInformationCircleOutline className="h-6 w-6 text-error-medium" />
-              </div>
-            </Tooltip>
-          </div>
-        )}
-      </div> */}
-
-      <SignupInput
-        step={step}
-        errors={errors}
-        register={register}
-        label="Direccón de tu negocio"
-        field="businessAddress"
-        placeholder="Escribe la Direccón de tu negocio"
-        type="text"
-        errorMessage={errors?.businessAddress?.message}
-        disableOption={
-          selectBusiness === "" || selectBusiness === optionsBusiness[1]
-            ? true
-            : false
-        }
-      />
-
-      {/* <div className="flex items-center justify-center gap-2">
-        <Input
-          type="businessAddress"
-          {...register("businessAddress")}
-          label="Direccón de tu negocio"
-          labelPlacement="outside"
-          id="businessAddress"
-          isDisabled={
-            selectBusiness === "" || selectBusiness === optionsBusiness[1]
-              ? true
-              : false
-          }
-          placeholder="Escribe el Direccón de tu negocio "
-          className="text-primary"
-          validationState={
-            errors?.businessAddress?.message ? `invalid` : "valid"
-          }
-          classNames={{
-            inputWrapper: [
-              "p-2",
-              "group-data-[focus=true]:border-details-low rounded-[4px] min-h-4 max-h-8 w-full",
-            ],
-            label: [
-              "text-primary font-semibold text-xs group-data-[invalid=true]:!text-error-strong",
-            ],
-            input: ["placeholder:group-data-[invalid=true]:text-error-medium"],
-          }}
-        />
-        {errors.businessAddress && (
-          <div className="translate-y-2.5">
-            <Tooltip
-              className="top-0 max-w-[15rem] bg-error-medium text-center text-white"
-              content={`${errors?.businessAddress?.message}`}
-            >
-              <div>
-                <IoMdInformationCircleOutline className="h-6 w-6 text-error-medium" />
-              </div>
-            </Tooltip>
-          </div>
-        )}
-      </div> */}
-
-      <div className=" flex w-full flex-col items-center justify-center">
-        <div className="h-[16px] pb-1.5"></div>
-        <span className="pointer-events-none block w-full origin-top-left pb-1.5 text-left text-xs font-semibold text-primary text-primary/50 transition-all !duration-200 !ease-out will-change-auto group-data-[invalid=true]:!text-error-strong motion-reduce:transition-none"></span>
-        <Select
-          isDisabled={
-            selectBusiness === "" || selectBusiness === optionsBusiness[1]
-              ? true
-              : false
-          }
-          classNames={{
-            trigger: ["min-h-4 max-h-8 w-full rounded-[4px] px-2"],
-            value: ["text-xs text-primary -translate-y-[.5rem]"],
-            label: [
-              "text-xs group-data-[filled=true]:-translate-y-7 group-data-[filled=true]:-translate-x-2 group-data-[filled=true]:text-primary group-data-[filled=true]:text-xs group-data-[filled=true]:font-semibold",
-            ],
-          }}
-          {...register("businessOpen", { required: "social is required" })}
-          label="Horario de apertura"
-          className="max-w-xs"
-        >
-          {dateBusinessOpen.map((option) => (
-            <SelectItem
-              onClick={() => setSelectBusiness(option)}
-              key={option}
-              value={option}
-            >
-              {option}
-            </SelectItem>
-          ))}
-        </Select>
-        {errors.businessOpen && (
-          <div className="translate-y-2.5">
-            <Tooltip
-              className="top-0 max-w-[15rem] bg-error-medium text-center text-white"
-              content={`${errors?.businessOpen?.message}`}
-            >
-              <div>
-                <IoMdInformationCircleOutline className="h-6 w-6 text-error-medium" />
-              </div>
-            </Tooltip>
-          </div>
-        )}
       </div>
-      <div className=" flex w-full flex-col items-center justify-center">
-        <div className="h-[16px] pb-1.5"></div>
-        <span className="pointer-events-none block w-full origin-top-left pb-1.5 text-left text-xs font-semibold text-primary text-primary/50 transition-all !duration-200 !ease-out will-change-auto group-data-[invalid=true]:!text-error-strong motion-reduce:transition-none"></span>
-        <Select
-          isDisabled={
-            selectBusiness === "" || selectBusiness === optionsBusiness[1]
-              ? true
-              : false
-          }
-          classNames={{
-            trigger: ["min-h-4 max-h-8 w-full rounded-[4px] px-2"],
-            value: ["text-xs text-primary -translate-y-[.5rem]"],
-            label: [
-              "text-xs group-data-[filled=true]:-translate-y-7 group-data-[filled=true]:-translate-x-2 group-data-[filled=true]:text-primary group-data-[filled=true]:text-xs group-data-[filled=true]:font-semibold",
-            ],
-          }}
-          {...register("businessOpen", { required: "social is required" })}
-          label="Horario de cierre"
-          className="max-w-xs"
+
+      <div className=" flex w-full flex-col items-start justify-start gap-2">
+        <label
+          className={`${errors.openTime && `!text-error-strong`} ${
+            errors.closedTime && `!text-error-strong`
+          } block origin-top-left text-left  text-xs font-semibold text-primary transition-all !duration-200 !ease-out will-change-auto group-data-[invalid=true]:!text-error-strong motion-reduce:transition-none`}
         >
-          {dateBusinessOpen.map((option) => (
-            <SelectItem
-              onClick={() => setSelectBusiness(option)}
-              key={option}
-              value={option}
-            >
-              {option}
-            </SelectItem>
-          ))}
-        </Select>
-        {errors.businessOpen && (
-          <div className="translate-y-2.5">
-            <Tooltip
-              className="top-0 max-w-[15rem] bg-error-medium text-center text-white"
-              content={`${errors?.businessOpen?.message}`}
-            >
-              <div>
-                <IoMdInformationCircleOutline className="h-6 w-6 text-error-medium" />
-              </div>
-            </Tooltip>
-          </div>
-        )}
+          Horarios de atención
+        </label>
+        <div className="flex h-full w-full flex-row items-center justify-center gap-2">
+          <TimeInput
+            field="openTime"
+            register={register}
+            errorMessage={errors?.openTime?.message}
+          />
+          a
+          <TimeInput
+            field="closedTime"
+            register={register}
+            errorMessage={errors?.closedTime?.message}
+          />
+        </div>
       </div>
     </div>
   );
