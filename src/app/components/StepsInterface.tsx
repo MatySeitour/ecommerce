@@ -7,29 +7,35 @@ import { motion } from "framer-motion";
 
 export default function StepsInterface() {
   const container = {
-    // hidden: { opacity: 1, scale: 0 },
     visible: {
-      opacity: 1,
-      scale: 1,
       transition: {
-        delayChildren: 0.3,
-        staggerChildren: 0.3,
+        ease: [0, 0.71, 0.2, 1.01],
+        // delayChildren: 0.1,
+        staggerChildren: 0.2,
+        duration: 0.5,
       },
     },
   };
 
   const item = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 60, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
+      transition: {
+        ease: [0, 0.71, 0.2, 1.01],
+        duration: 0.5,
+      },
     },
   };
 
   const { step } = useStep();
 
   return (
-    <article
+    <motion.article
+      variants={container}
+      initial="hidden"
+      animate="visible"
       className={
         step != 4
           ? "visible flex h-screen w-[34rem] flex-col items-center justify-center gap-8 bg-gradient-to-t from-details-low to-details-medium px-6 py-10 transition-all duration-700"
@@ -38,8 +44,7 @@ export default function StepsInterface() {
     >
       <div className="w-full text-left">
         <motion.h2
-          initial={{ translateY: 10 }}
-          animate={{ translateY: 0 }}
+          variants={item}
           className={`px-2 text-3xl font-extrabold text-primary ${
             step == 4 && `hidden`
           }`}
@@ -47,12 +52,7 @@ export default function StepsInterface() {
           Nombre de la app
         </motion.h2>
       </div>
-      <motion.ul
-        className="container"
-        variants={container}
-        initial="hidden"
-        animate="visible"
-      >
+      <motion.ul className="w-full">
         {["Crea.", "Administra.", "Sueña."].map((index) => (
           <motion.li
             key={index}
@@ -65,7 +65,7 @@ export default function StepsInterface() {
           </motion.li>
         ))}
       </motion.ul>
-      <div className="h-60  w-full">
+      <motion.div variants={item} className="h-60 w-full">
         <Image
           className="h-full w-full object-cover"
           width={500}
@@ -73,15 +73,15 @@ export default function StepsInterface() {
           alt="store"
           src={"/app-store.svg"}
         />
-      </div>
+      </motion.div>
       <Button
-        className={`w-full bg-white text-details-low hover:bg-slate-300 `}
+        className={`animation-delay__05 w-full animate-buttonUp bg-white text-details-low opacity-0 ease-up-slow hover:bg-slate-300`}
         radius="sm"
         size="md"
         type="submit"
       >
         ¿Querés saber más?
       </Button>
-    </article>
+    </motion.article>
   );
 }
