@@ -4,6 +4,7 @@ import "./globals.css";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getSession } from "./hooks/session";
+import HomeClient from "./components/HomeClient";
 
 async function getData() {
   const sessionCookie = cookies().get("authorization");
@@ -12,7 +13,7 @@ async function getData() {
   const isLogin = await getSession(sessionCookie);
 
   if (!isLogin) return redirect("/");
-  return sessionCookie;
+  return isLogin;
 }
 
 export default async function Home() {
@@ -22,6 +23,7 @@ export default async function Home() {
     // <Nav />
     <main className="min-h-screen w-full bg-slate-100 px-2 pt-24">
       <SearchHome />
+      <HomeClient dataCompany={log} />
       <CreateCategory />
     </main>
   );
