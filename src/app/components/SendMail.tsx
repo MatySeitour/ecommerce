@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { IoIosMail } from "react-icons/io";
+import { Button } from "@nextui-org/button";
 
 export default function SendMail() {
   return (
@@ -18,11 +19,22 @@ export default function SendMail() {
       <div className="h-full w-full">
         <div className="flex h-full w-full flex-col items-center justify-center gap-4">
           <IoIosMail className="h-36 w-36 text-details-medium" />
-          <div className="px-4 text-center">
-            <h4 className="font-semibold text-primary">
-              Hemos enviado un codigo a tu correo eléctronico para verificar tu
-              cuenta
+          <div className="flex flex-col gap-4 px-4 text-center">
+            <h4 className="text-xl font-semibold text-primary">
+              Codigo de verificación
             </h4>
+            <p>
+              Enviaremos un codigo de verificación para comprobar tu identidad.
+            </p>
+
+            <Button
+              className={`bg-details-low text-white hover:bg-slate-300`}
+              radius="sm"
+              size="md"
+              type="submit"
+            >
+              Enviar codigo
+            </Button>
           </div>
         </div>
       </div>
