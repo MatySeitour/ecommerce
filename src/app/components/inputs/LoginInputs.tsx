@@ -10,7 +10,7 @@ export default function LoginInputs({ register }: { register: any }) {
 
   const toggleVisibility = () => setIsVisible(!isVisible);
   return (
-    <div className="flex flex-col gap-4 items-center justify-center">
+    <div className="flex flex-col items-center justify-center gap-4">
       <Input
         {...register("username", {
           required: "El usuario es requerido",
@@ -42,7 +42,7 @@ export default function LoginInputs({ register }: { register: any }) {
         })}
         placeholder="Escribe tu Contraseña"
         radius="sm"
-        className="max-w-xs text- mb-2"
+        className="text- mb-2 max-w-xs"
         classNames={{
           inputWrapper: ["p-2", "group-data-[focus=true]:border-details-low"],
         }}
@@ -53,9 +53,9 @@ export default function LoginInputs({ register }: { register: any }) {
             onClick={toggleVisibility}
           >
             {isVisible ? (
-              <BsEyeSlashFill className="text-2xl pointer-events-none text-details-medium" />
+              <BsEyeSlashFill className="pointer-events-none text-2xl text-details-medium" />
             ) : (
-              <BsEyeFill className="text-2xl pointer-events-none text-details-medium" />
+              <BsEyeFill className="pointer-events-none text-2xl text-details-medium" />
             )}
           </button>
         }
