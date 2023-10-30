@@ -31,7 +31,6 @@ export default function FormSignUp() {
     sendData,
     nextStep,
     addValuesForm,
-    // setStep,
   } = multiForm();
 
   const {
