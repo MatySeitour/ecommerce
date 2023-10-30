@@ -12,7 +12,9 @@ async function getData() {
   if (sessionCookie?.name != "authorization") return redirect("/login");
   const isLogin = await getSession(sessionCookie);
 
-  if (!isLogin) return redirect("/");
+  if (!isLogin) return redirect("/signup");
+  if (!isLogin.IsVerify) return redirect("/verify-account");
+
   return isLogin;
 }
 
