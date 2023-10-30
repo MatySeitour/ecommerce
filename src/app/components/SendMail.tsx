@@ -3,8 +3,20 @@
 import { motion } from "framer-motion";
 import { IoIosMail } from "react-icons/io";
 import { Button } from "@nextui-org/button";
+import axios from "axios";
 
 export default function SendMail() {
+  const handleSendCode = async () => {
+    const res = await axios.post(
+      "http://localhost:3000/verify-account",
+      {
+        code: "asdasd",
+      },
+      { withCredentials: true },
+    );
+    console.log(res);
+  };
+
   return (
     <motion.div
       initial={{ translateY: 1000 }}
@@ -14,7 +26,7 @@ export default function SendMail() {
         stiffness: 260,
         damping: 20,
       }}
-      className={"h-auto w-[30rem] rounded-md bg-white p-4"}
+      className={"h-auto w-[30rem] rounded-md bg-white p-4 shadow-md"}
     >
       <div className="h-full w-full">
         <div className="flex h-full w-full flex-col items-center justify-center gap-4">
@@ -28,10 +40,11 @@ export default function SendMail() {
             </p>
 
             <Button
-              className={`bg-details-low text-white hover:bg-slate-300`}
+              className={`bg-details-low text-white hover:bg-details-low/80`}
               radius="sm"
               size="md"
-              type="submit"
+              onClick={() => handleSendCode()}
+              type="button"
             >
               Enviar codigo
             </Button>
