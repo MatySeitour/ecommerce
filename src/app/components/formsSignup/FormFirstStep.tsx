@@ -1,6 +1,3 @@
-import { Input } from "@nextui-org/input";
-import { Tooltip } from "@nextui-org/tooltip";
-import { IoMdInformationCircleOutline } from "react-icons/io";
 import SignupInput from "../inputs/SignupInput";
 import { useState } from "react";
 
