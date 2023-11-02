@@ -26,13 +26,16 @@ export default function SelectInput({
           <Select
             classNames={{
               trigger: [
-                `min-h-4 max-h-8 w-full rounded-[4px] p-2 group-data-[focus=true]:border-details-low rounded-[4px] min-h-4 max-h-8 w-full group-data-[hover=true]:bg-white/30 group-data-[focus-visible=true]:ring-0 group-data-[focus-visible=true]:ring-offset-0 ${
-                  errorMessage && `bg-error-low text-error-medium`
+                `min-h-4 max-h-8 border border-details-low w-full rounded-[4px] p-2 group-data-[focus=true]:border-details-low rounded-[4px] min-h-4 max-h-8 w-full group-data-[hover=true]:bg-white/30 group-data-[focus-visible=true]:ring-0 group-data-[focus-visible=true]:ring-offset-0 ${
+                  errorMessage &&
+                  `bg-error-low text-error-medium border border-error-medium`
                 }`,
               ],
               value: ["text-sm text-primary -translate-y-[.5rem]"],
               label: [
-                "text-xs group-data-[filled=true]:-translate-y-7 group-data-[filled=true]:-translate-x-2 group-data-[filled=true]:text-primary group-data-[filled=true]:text-xs group-data-[filled=true]:font-semibold",
+                `text-xs group-data-[filled=true]:-translate-y-7 group-data-[filled=true]:-translate-x-2 group-data-[filled=true]:text-primary group-data-[filled=true]:text-xs group-data-[filled=true]:font-semibold ${
+                  errorMessage && `!text-error-medium`
+                }`,
               ],
               //   "text-primary font-semibold text-sm group-data-[invalid=true]:!text-error-strong",
             }}
