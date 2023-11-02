@@ -1,4 +1,5 @@
 import axios from "axios";
+import { redirect } from "next/navigation";
 
 type cookieType = {
   name: string;
@@ -15,6 +16,10 @@ export async function getSession(serverCookie?: cookieType) {
     : {
         withCredentials: true,
       };
-  const rawSession = await axios.get(url, options);
-  return rawSession.data;
+  try {
+    const rawSession = await axios.get(url, options);
+    return rawSession.data;
+  } catch (e) {
+    redirect("/error-server");
+  }
 }
