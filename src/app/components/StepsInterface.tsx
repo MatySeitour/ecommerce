@@ -74,14 +74,16 @@ export default function StepsInterface() {
           src={"/app-store.svg"}
         />
       </motion.div>
-      <Button
-        className={`animation-delay__05 w-full animate-buttonUp bg-white text-details-low opacity-0 ease-up-slow hover:bg-slate-300`}
-        radius="sm"
-        size="md"
-        type="submit"
-      >
-        ¿Querés saber más?
-      </Button>
+      <motion.div variants={item} className="w-full">
+        <Button
+          className={`w-full bg-white text-details-low hover:bg-slate-300`}
+          radius="sm"
+          size="md"
+          type="submit"
+        >
+          ¿Querés saber más?
+        </Button>
+      </motion.div>
     </motion.article>
   );
 }
