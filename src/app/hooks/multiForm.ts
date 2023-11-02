@@ -3,6 +3,17 @@ import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { stepsState, useStep } from "../store/stepsStore";
 
+type Week =
+  | `Lunes`
+  | `Martes`
+  | `Miercoles`
+  | `Jueves`
+  | `Viernes`
+  | `Sabado`
+  | `Domingo`;
+
+type TimeHour = `${string}${string}:${string}${string}`;
+
 interface SignUpData {
   company: string;
   confirmPassword: string | number;
@@ -12,10 +23,10 @@ interface SignUpData {
   province: string;
   city: string;
   businessAddress: string;
-  openWeek: string;
-  closedWeek: string;
-  openTime: string;
-  closedTime: string;
+  openWeek: Week;
+  closedWeek: Week;
+  openTime: TimeHour;
+  closedTime: TimeHour;
   logo?: string;
 }
 
