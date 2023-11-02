@@ -13,8 +13,6 @@ import Steps from "./Steps";
 import { motion } from "framer-motion";
 
 import AccountSuccess from "./AccountSuccess";
-import EmailOtp from "./EmailOtp";
-import SendMail from "./SendMail";
 
 export default function FormSignUp() {
   const router = useRouter();
@@ -64,7 +62,7 @@ export default function FormSignUp() {
     },
   };
 
-  const { firstStep, secondStep, completeSecondStep } = stepsState();
+  const { completeSecondStep } = stepsState();
   const { logoFile } = useStep();
 
   const onSubmit = async (data: FieldValues) => {
@@ -116,25 +114,19 @@ export default function FormSignUp() {
         }
       >
         <Steps />
-        {/* <span className="text-sm text-secondary">{`Paso ${step} / 3`}</span> */}
         <motion.h2
           variants={itemAnimation}
-          className="text-3xl font-extrabold text-primary"
+          className="text-4xl font-extrabold text-primary"
         >
           Crea tu negocio
         </motion.h2>
         <motion.h3
           variants={itemAnimation}
-          className="text-lg font-medium text-primary"
+          className="text-lg font-medium text-details-low"
         >
           Crea el perfil de tu negocio online{" "}
         </motion.h3>
-        {/* {step != 1 && (
-          <div className="max-w-sm text-xs font-semibold text-secondary">
-            Si desear agregar más datos sobre tu negocio más tarde, puedes
-            saltearte todos estos pasos.
-          </div>
-        )} */}
+
         <motion.form
           noValidate
           onSubmit={handleSubmit(onSubmit)}
@@ -173,11 +165,7 @@ export default function FormSignUp() {
               </b>
             </p>
           </motion.div>
-          {/* {!errorServer && (
-            <div className="text-2xl text-error-medium">
-              Lo sentimos, estamos teniendo problemas
-            </div>
-          )} */}
+
           <motion.div
             variants={itemAnimation}
             className="flex flex-row items-center justify-center gap-4"
@@ -205,7 +193,7 @@ export default function FormSignUp() {
               <Button
                 onClick={() => setSkipState(true)}
                 isLoading={isSubmitting ? true : false}
-                className="w-full max-w-[7rem] bg-details-medium text-white hover:bg-details-medium/90"
+                className="w-full max-w-[7rem] bg-details-low text-white hover:bg-details-medium/60"
                 radius="sm"
                 size="md"
                 type="submit"
