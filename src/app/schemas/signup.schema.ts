@@ -2,6 +2,16 @@ import { z } from "zod";
 
 const ACCEPTED_IMAGE_TYPES = ["image/png"];
 
+const week = [
+  `Lunes`,
+  `Martes`,
+  `Miercoles`,
+  `Jueves`,
+  `Viernes`,
+  `Sabado`,
+  `Domingo`,
+];
+
 export const firstStepSchema = z
   .object({
     company: z
@@ -58,12 +68,12 @@ export const secondStepSchema = z.object({
     return city.length != 0;
   }, "Selecciona una ciudad."),
 
-  openWeek: z.string().refine((business) => {
-    return business.length != 0;
+  openWeek: z.string().refine((file) => {
+    return week.includes(file);
   }, "Selecciona un dia."),
 
-  closedWeek: z.string().refine((business) => {
-    return business.length != 0;
+  closedWeek: z.string().refine((file) => {
+    return week.includes(file);
   }, "Selecciona un dia."),
 
   openTime: z
@@ -74,10 +84,6 @@ export const secondStepSchema = z.object({
       ),
       "Selecciona un horario.",
     ),
-  // .refine((openHour) => {
-  //   console.log(openHour);
-  //   return openHour.length != 0;
-  // }, "Sólo se permiten imagenes con la extensión .png"),
 
   closedTime: z
     .string()
