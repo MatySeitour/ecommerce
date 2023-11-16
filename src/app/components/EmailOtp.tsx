@@ -8,8 +8,11 @@ import { VscDebugRestart } from "react-icons/vsc";
 import { Button } from "@nextui-org/button";
 import axios from "axios";
 
+type StatusCode = 410 | 200 | 400 | null;
+
 export default function EmailOtp({ emailAccount }: { emailAccount: string }) {
   const [otp, setOtp] = useState("");
+  const [codeStatus, setCodeStatus] = useState<StatusCode>(null);
 
   const handleSendCodeVerify = async () => {
     try {
@@ -20,9 +23,14 @@ export default function EmailOtp({ emailAccount }: { emailAccount: string }) {
         },
         { withCredentials: true },
       );
-      console.log(res);
-    } catch (e) {
-      console.error(e);
+      if (res.status == 200) {
+        setCodeStatus(res.status);
+      }
+    } catch (e: any) {
+      if (e.response.status == 400 || e.response.status == 410) {
+        setCodeStatus(e.response.status);
+        console.error(e);
+      }
     }
   };
 
@@ -61,9 +69,22 @@ export default function EmailOtp({ emailAccount }: { emailAccount: string }) {
             value={otp}
             onChange={setOtp}
             numInputs={6}
-            inputStyle={`h-12 !w-10 rounded-md border-2 border-details-low text-center text-lg outline-none text-primary`}
+            inputStyle={`h-12 !w-10 rounded-md border-2 border-details-low text-center text-lg outline-none text-primary ${
+              codeStatus == 400 && `border-error-medium`
+            } ${codeStatus == 410 && `border-error-medium`}`}
             renderInput={(props) => <input {...props} />}
           />
+          {codeStatus == 400 && (
+            <p className="text-sm text-error-medium">
+              El código que introduciste no es el correcto.
+            </p>
+          )}
+          {codeStatus == 410 && (
+            <p className="max-w-[21rem] text-center text-sm text-error-medium ">
+              El código ya expiró. Por favor, haga click en reenviar codigo e
+              introduzca el codigo.
+            </p>
+          )}
           <Button
             type="button"
             radius="md"
