@@ -2,36 +2,26 @@ import axios from "axios";
 import { useState } from "react";
 import { FieldValues } from "react-hook-form";
 import { stepsState, useStep } from "../store/stepsStore";
+import { DataUserAccount } from "../types";
 
-type Week =
-  | `Lunes`
-  | `Martes`
-  | `Miercoles`
-  | `Jueves`
-  | `Viernes`
-  | `Sabado`
-  | `Domingo`;
-
-type TimeHour = `${string}${string}:${string}${string}`;
-
-interface SignUpData {
-  company: string;
-  confirmPassword: string | number;
-  email: string;
-  password: string | number;
-  phone: number;
-  province: string;
-  city: string;
-  businessAddress: string;
-  openWeek: Week;
-  closedWeek: Week;
-  openTime: TimeHour;
-  closedTime: TimeHour;
-  logo?: string;
-}
+// interface DataUserAccount {
+//   company: string;
+//   confirmPassword: string | number;
+//   email: string;
+//   password: string | number;
+//   phone: number;
+//   province: string;
+//   city: string;
+//   businessAddress: string;
+//   openWeek: Week;
+//   closedWeek: Week;
+//   openTime: TimeHour;
+//   closedTime: TimeHour;
+//   logo?: string;
+// }
 
 export default function useMultiForm() {
-  const [values, setValues] = useState<SignUpData>();
+  const [values, setValues] = useState<DataUserAccount>();
   const [errorEmail, setErrorEmail] = useState<number>(0);
   const [skipState, setSkipState] = useState<boolean>(false);
 
@@ -87,7 +77,7 @@ export default function useMultiForm() {
     addValuesForm(data);
   }
 
-  async function sendData(data: SignUpData) {
+  async function sendData(data: DataUserAccount) {
     try {
       const res = await axios.postForm(
         "http://localhost:3000/signup",
