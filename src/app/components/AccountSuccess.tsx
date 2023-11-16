@@ -1,13 +1,8 @@
 import { HiMiniCheckCircle } from "react-icons/hi2";
 import { motion } from "framer-motion";
-import OtpInput from "react-otp-input";
-import { Button } from "@nextui-org/button";
-import { useState } from "react";
 import Link from "next/link";
 
 export default function AccountSuccess() {
-  const [otp, setOtp] = useState("");
-
   return (
     <motion.div
       initial={{ translateY: 1000 }}
