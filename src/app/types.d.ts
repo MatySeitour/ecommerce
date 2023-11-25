@@ -27,5 +27,5 @@ type InfoCompany = {
   closedWeek: Week;
   openTime: TimeHour;
   closedTime: TimeHour;
-  logo?: string;
+  logoCompany?: File;
 };
