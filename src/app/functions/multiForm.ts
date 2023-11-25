@@ -4,25 +4,10 @@ import { FieldValues } from "react-hook-form";
 import { stepsState, useStep } from "../store/stepsStore";
 import { DataUserAccount } from "../types";
 
-// interface DataUserAccount {
-//   company: string;
-//   confirmPassword: string | number;
-//   email: string;
-//   password: string | number;
-//   phone: number;
-//   province: string;
-//   city: string;
-//   businessAddress: string;
-//   openWeek: Week;
-//   closedWeek: Week;
-//   openTime: TimeHour;
-//   closedTime: TimeHour;
-//   logo?: string;
-// }
-
 export default function useMultiForm() {
   const [values, setValues] = useState<DataUserAccount>();
   const [errorEmail, setErrorEmail] = useState<number>(0);
+  const [errorPhone, setErrorPhone] = useState<number>(0);
   const [skipState, setSkipState] = useState<boolean>(false);
 
   const { completeFirstStep } = stepsState();
@@ -37,7 +22,7 @@ export default function useMultiForm() {
 
   function nextStep(stepValue: number, data: FieldValues) {
     if (stepValue <= 4) {
-      increment(1);
+      increment(stepValue);
       addValuesForm(data);
     }
   }
@@ -48,6 +33,27 @@ export default function useMultiForm() {
     }
   }
 
+  async function verifyPhone(data: FieldValues) {
+    try {
+      const res = await axios.postForm(
+        "http://localhost:3000/verifyPhone",
+        {
+          phone: data.phone,
+        },
+        { withCredentials: true },
+      );
+      setErrorPhone(res.status);
+      return true;
+    } catch (error: any) {
+      if (error?.response?.data == "Número de telefono en uso") {
+        setErrorPhone(error?.response?.status);
+        console.error(error?.response);
+        return false;
+      } else {
+        return false;
+      }
+    }
+  }
   async function verifyEmail(data: FieldValues) {
     try {
       const res = await axios.postForm(
@@ -57,16 +63,15 @@ export default function useMultiForm() {
         },
         { withCredentials: true },
       );
-      nextStep(step, data);
+      console.log("esta es la respuesta", res);
+      // nextStep(step, data);
       setErrorEmail(res.status);
-      completeFirstStep();
-
       return true;
     } catch (error: any) {
       if (error?.response?.data == "Este mail no es válido") {
         setErrorEmail(error?.response?.status);
         console.error(error?.response);
-        return true;
+        return false;
       } else {
         return false;
       }
@@ -94,7 +99,7 @@ export default function useMultiForm() {
           closedWeek: data?.closedWeek,
           openTime: data?.openTime,
           closedTime: data?.closedTime,
-          logo: data?.logo,
+          logoCompany: data?.logoCompany,
         },
         { withCredentials: true },
       );
@@ -120,5 +125,7 @@ export default function useMultiForm() {
     setSkipState,
     increment,
     addValuesForm,
+    verifyPhone,
+    errorPhone,
   };
 }
