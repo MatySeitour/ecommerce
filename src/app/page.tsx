@@ -5,17 +5,20 @@ import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getSession } from "./hooks/session";
 import HomeClient from "./components/HomeClient";
+import protectRoutes from "./hooks/protectRoutes";
 
 async function getData() {
   const sessionCookie = cookies().get("authorization");
+  return await protectRoutes(sessionCookie);
+  // if (sessionCookie?.name != "authorization") return redirect("/login");
+  // const isLogin = await getSession(sessionCookie);
 
-  if (sessionCookie?.name != "authorization") return redirect("/login");
-  const isLogin = await getSession(sessionCookie);
-
-  if (!isLogin) return redirect("/signup");
-  if (!isLogin.IsVerify) return redirect("/verify-account");
-
-  return isLogin;
+  // if (!isLogin) return redirect("/signup");
+  // if (isLogin.IsVerify == false) {
+  //   return redirect("/verify-account");
+  // } else {
+  //   return isLogin;
+  // }
 }
 
 export default async function Home() {
