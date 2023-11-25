@@ -1,18 +1,14 @@
-import { redirect } from "next/navigation";
 import SendMail from "../components/SendMail";
-import { getSession } from "../hooks/session";
 import { varela } from "../utils/fonts";
 import { cookies } from "next/headers";
+import { protectVerifyAccount } from "../hooks/protectRoutes";
 import { DataUserAccount } from "../types";
 
 async function getData() {
   const sessionCookie = cookies().get("authorization");
-
-  if (sessionCookie?.name != "authorization") return false;
-  const isLogin = await getSession(sessionCookie);
-
-  if (!isLogin) return false;
-  return isLogin;
+  const a = await protectVerifyAccount(sessionCookie);
+  console.log(a);
+  return a;
 }
 
 export default async function verifyAccount() {
