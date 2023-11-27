@@ -4,7 +4,7 @@ import { varela } from "../utils/fonts";
 import { FormLogin } from "../components/FormLogin";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { getSession } from "../hooks/session";
+import { getSession } from "../functions/session";
 
 async function getData() {
   const sessionCookie = cookies().get("authorization");
