@@ -1,7 +1,7 @@
 import SendMail from "../components/SendMail";
 import { varela } from "../utils/fonts";
 import { cookies } from "next/headers";
-import { protectVerifyAccount } from "../hooks/protectRoutes";
+import { protectVerifyAccount } from "../functions/protectRoutes";
 import { DataUserAccount } from "../types";
 
 async function getData() {
