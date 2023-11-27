@@ -4,7 +4,7 @@ import { Button } from "@nextui-org/button";
 import { useForm, FieldValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import multiForm from "../hooks/multiForm";
+import multiForm from "../functions/multiForm";
 import FormFirstStep from "./formsSignup/FormFirstStep";
 import FormSecondStep from "./formsSignup/FormSecondStep";
 import { firstStepSchema, secondStepSchema } from "../schemas/signup.schema";
@@ -27,8 +27,10 @@ export default function FormSignUp() {
     skipSignUp,
     values,
     sendData,
+    errorPhone,
     nextStep,
     addValuesForm,
+    verifyPhone,
   } = multiForm();
 
   const {
@@ -62,14 +64,19 @@ export default function FormSignUp() {
     },
   };
 
-  const { completeSecondStep } = stepsState();
+  const { completeSecondStep, completeFirstStep } = stepsState();
   const { logoFile } = useStep();
 
   const onSubmit = async (data: FieldValues) => {
     if (step == 1) {
-      const a = await verifyEmail(data);
-      if (a == false) {
-        router.push("/error-server");
+      const isEmailValidate = await verifyEmail(data);
+      const isPhoneValidate = await verifyPhone(data);
+      // if (isEmailValidate == false || isPhoneValidate == false) {
+      //   router.push("/error-server");
+      // }
+      if (isEmailValidate && isPhoneValidate) {
+        nextStep(step, data);
+        completeFirstStep();
       }
     }
     if (step == 2) {
@@ -78,7 +85,8 @@ export default function FormSignUp() {
       completeSecondStep();
     }
     if (step == 3) {
-      addValuesForm(data);
+      const dataWithImage3 = { ...data, logoCompany: logoFile };
+      addValuesForm(dataWithImage3);
       if (values != undefined) {
         const a = await sendData(values);
         console.log(a);
@@ -102,39 +110,45 @@ export default function FormSignUp() {
   console.log(values);
 
   return (
-    <div className={`h-full w-full overflow-hidden`}>
+    <div className={`h-full w-full overflow-y-scroll sm:overflow-hidden`}>
       <motion.div
         variants={containerSignUpAnimation}
         initial="hidden"
         animate="visible"
         className={
           step != 4
-            ? "visible flex h-full w-full flex-col items-center justify-center gap-4 px-10 py-2 transition-all"
+            ? "flex h-full flex-col gap-6 sm:items-center sm:justify-center md:gap-8 md:px-10 lg:visible lg:w-full lg:py-2 lg:transition-all"
             : "invisible hidden h-full w-full flex-col items-center justify-center gap-4 px-10 py-2 transition-all"
         }
       >
-        <Steps />
-        <motion.h2
+        <motion.div
+          className="shadow-mobile__steps flex w-full flex-col gap-4 py-4 sm:w-auto sm:shadow-none"
           variants={itemAnimation}
-          className="text-4xl font-extrabold text-primary"
         >
-          Crea tu negocio
-        </motion.h2>
-        <motion.h3
-          variants={itemAnimation}
-          className="text-lg font-medium text-details-low"
-        >
-          Crea el perfil de tu negocio online{" "}
-        </motion.h3>
+          <Steps />
+
+          <motion.h2
+            variants={itemAnimation}
+            className="text-center text-4xl font-extrabold text-primary"
+          >
+            Crea tu negocio
+          </motion.h2>
+          <motion.h3
+            variants={itemAnimation}
+            className="text-center text-lg font-medium text-details-low"
+          >
+            Crea el perfil de tu negocio online{" "}
+          </motion.h3>
+        </motion.div>
 
         <motion.form
           noValidate
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-4"
+          className="flex h-full flex-col gap-6 px-4 sm:h-auto sm:gap-4 sm:px-0"
         >
           <motion.div
             variants={itemAnimation}
-            className="relative flex h-64 items-center justify-center overflow-hidden"
+            className="relative flex h-full items-center justify-center overflow-hidden sm:h-64"
           >
             {step >= 1 && (
               <FormFirstStep
@@ -142,6 +156,7 @@ export default function FormSignUp() {
                 errors={errors}
                 register={register}
                 errorEmail={errorEmail}
+                errorPhone={errorPhone}
               />
             )}
 
@@ -149,14 +164,6 @@ export default function FormSignUp() {
               <FormSecondStep step={step} errors={errors} register={register} />
             )}
           </motion.div>
-          <span
-            className={`text-center text-primary opacity-0 transition-opacity ${
-              step > 1 && `opacity-100 transition-opacity`
-            }`}
-          >
-            Si lo deseas, puedes omitir los pasos siguientes para completarlos
-            más tarde.
-          </span>
           <motion.div variants={itemAnimation} className="text-center">
             <p className="text-xs">
               Esta información se guardará de forma segura según{" "}
