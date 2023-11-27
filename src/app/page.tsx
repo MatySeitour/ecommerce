@@ -3,9 +3,9 @@ import { SearchHome } from "./components/SearchHome";
 import "./globals.css";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { getSession } from "./hooks/session";
+import { getSession } from "./functions/session";
 import HomeClient from "./components/HomeClient";
-import protectRoutes from "./hooks/protectRoutes";
+import protectRoutes from "./functions/protectRoutes";
 
 async function getData() {
   const sessionCookie = cookies().get("authorization");
