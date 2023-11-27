@@ -38,14 +38,14 @@ export default function StepsInterface() {
       animate="visible"
       className={
         step != 4
-          ? "visible flex h-screen w-[34rem] flex-col items-center justify-center gap-8 bg-gradient-to-t from-details-low to-details-medium px-6 py-10 transition-all duration-700"
+          ? "visible hidden h-screen flex-col items-center justify-center gap-8 bg-gradient-to-t from-details-low to-details-medium px-6 py-10 transition-all duration-700 sm:w-[24rem] md:flex lg:w-[34rem]"
           : "invisible flex h-screen w-0 flex-col items-center justify-center bg-gradient-to-t from-details-low to-details-medium py-10 transition-all duration-700"
       }
     >
       <div className="w-full text-left">
         <motion.h2
           variants={item}
-          className={`px-2 text-3xl font-extrabold text-primary ${
+          className={`px-2 font-extrabold text-primary md:text-2xl lg:text-3xl ${
             step == 4 && `hidden`
           }`}
         >
@@ -56,7 +56,7 @@ export default function StepsInterface() {
         {["Crea.", "Administra.", "Sueña."].map((index) => (
           <motion.li
             key={index}
-            className={`px-2 text-2xl font-extrabold text-white ${
+            className={`px-2 font-extrabold text-white md:text-xl lg:text-2xl ${
               step == 4 && `hidden`
             }`}
             variants={item}
@@ -65,7 +65,7 @@ export default function StepsInterface() {
           </motion.li>
         ))}
       </motion.ul>
-      <motion.div variants={item} className="h-60 w-full">
+      <motion.div variants={item} className="w-full md:h-44 lg:h-60">
         <Image
           className="h-full w-full object-cover"
           width={500}
