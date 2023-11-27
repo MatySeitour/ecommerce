@@ -6,11 +6,13 @@ export default function FormFirstStep({
   errors,
   register,
   errorEmail,
+  errorPhone,
 }: {
   step: number;
   errors: any;
   register: any;
   errorEmail: number | undefined;
+  errorPhone: number | undefined;
 }) {
   const [isVisible, setIsVisible] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
@@ -20,7 +22,7 @@ export default function FormFirstStep({
       <div
         className={
           step === 1
-            ? `visible absolute grid w-full translate-x-0 grid-cols-2 gap-4 pr-4 transition-all`
+            ? `visible flex h-full w-full translate-x-0 flex-col gap-8 transition-all sm:absolute sm:grid sm:h-auto sm:grid-cols-2 sm:gap-4 sm:pr-4`
             : `invisible absolute grid -translate-x-[40rem] grid-cols-2 gap-4 transition-all`
         }
       >
@@ -63,6 +65,7 @@ export default function FormFirstStep({
           field="phone"
           placeholder="Escribe un numero de teléfono"
           errorMessage={errors?.phone?.message}
+          errorPhone={errorPhone}
         />
       </div>
     </>
