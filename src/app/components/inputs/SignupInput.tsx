@@ -14,6 +14,7 @@ export default function SignupInput({
   placeholder,
   errorMessage,
   errorEmail,
+  errorPhone,
   isVisible,
   handleVisible,
 }: {
@@ -24,9 +25,16 @@ export default function SignupInput({
   errorMessage: string;
   disableOption?: boolean;
   errorEmail?: number | undefined;
+  errorPhone?: number | undefined;
   isVisible?: boolean;
   handleVisible?: () => void | undefined;
 }) {
+  console.log("este es error email", errorEmail);
+  console.log("este es error phone", errorPhone);
+
+  const isErrorEmail = errorEmail != 400 ? false : true;
+  const isErrorPhone = errorPhone != 400 ? false : true;
+
   const isPassword =
     field === "password" || field === "confirmPassword" ? true : false;
 
@@ -57,7 +65,11 @@ export default function SignupInput({
         }
         className="h-auto text-primary"
         validationState={
-          errorMessage ? `invalid` : errorEmail === 400 ? "invalid" : "valid"
+          errorMessage
+            ? `invalid`
+            : isErrorEmail || isErrorPhone
+            ? "invalid"
+            : "valid"
         }
         classNames={{
           inputWrapper: [
@@ -84,11 +96,23 @@ export default function SignupInput({
           </Tooltip>
         </div>
       )}
-      {errorEmail === 400 && (
+      {isErrorEmail && (
         <div className="translate-y-2.5">
           <Tooltip
             className="top-0 max-w-[15rem] bg-error-medium text-center text-white"
             content={`Email no válido`}
+          >
+            <div>
+              <IoMdInformationCircleOutline className="h-6 w-6 text-error-medium" />
+            </div>
+          </Tooltip>
+        </div>
+      )}
+      {isErrorPhone && (
+        <div className="translate-y-2.5">
+          <Tooltip
+            className="top-0 max-w-[15rem] bg-error-medium text-center text-white"
+            content={`Número de telefono no válido`}
           >
             <div>
               <IoMdInformationCircleOutline className="h-6 w-6 text-error-medium" />
