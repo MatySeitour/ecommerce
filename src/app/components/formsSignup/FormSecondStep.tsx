@@ -8,6 +8,7 @@ import { useStep } from "@/app/store/stepsStore";
 import SignupInput from "../inputs/SignupInput";
 import SelectInput from "../SelectsForm/SelectInput";
 import TimeInput from "../inputs/TimeInput";
+import { FaTrashAlt } from "react-icons/fa";
 
 export default function FormSecondStep({
   step,
@@ -37,15 +38,15 @@ export default function FormSecondStep({
     <div
       className={
         step === 2
-          ? `visible absolute grid w-full translate-x-0 grid-cols-2 gap-4 transition-all`
+          ? `visible flex w-full translate-x-0 flex-col gap-4 transition-all sm:absolute sm:grid sm:grid-cols-2`
           : `invisible absolute grid translate-x-[40rem] grid-cols-2 gap-4 transition-all`
       }
     >
-      <div className="flex flex-col items-start justify-start gap-2">
-        <div className="flex flex-row items-center justify-center gap-4">
+      <div className="flex flex-col gap-2 sm:items-start sm:justify-start">
+        <div className="hidden flex-row items-center justify-center gap-4 lg:flex">
           <label
             htmlFor="logoCompany"
-            className="flex h-24 w-24 cursor-pointer flex-row items-center justify-center gap-2 overflow-hidden rounded-full border border-white/30 bg-white p-1 text-sm text-white outline-none placeholder:text-white focus:border-white"
+            className="flex h-20 w-20 cursor-pointer flex-row items-center justify-center gap-2 overflow-hidden rounded-full border border-white/30 bg-white p-1 text-sm text-white outline-none placeholder:text-white focus:border-white lg:h-24 lg:w-24"
           >
             {logoFile ? (
               <Image
@@ -94,15 +95,102 @@ export default function FormSecondStep({
               onClick={() => setFileData("")}
               // isLoading={isSubmitting ? true : false}
               isDisabled={logoFile ? false : true}
-              className="w-full max-w-[8rem] bg-error-medium text-[0.7rem] text-white hover:bg-error-medium/90"
+              className="hidden h-10 w-10 rounded-full bg-error-medium text-[0.7rem] text-white hover:bg-error-medium/90 lg:inline-block lg:w-full lg:max-w-[8rem]"
               radius="sm"
               size="sm"
               type="button"
             >
               Eliminar foto
             </Button>
+            <Button
+              onClick={() => setFileData("")}
+              // isLoading={isSubmitting ? true : false}
+              isDisabled={logoFile ? false : true}
+              className="inline-block h-10 w-10 min-w-0 rounded-full bg-error-medium p-0 text-[0.7rem] text-white hover:bg-error-medium/90 lg:hidden lg:w-full lg:max-w-[8rem]"
+              radius="sm"
+              size="sm"
+              type="button"
+            >
+              a
+            </Button>
             <span
-              className={`text-[0.66rem] text-secondary ${
+              className={`hidden text-[0.66rem] text-secondary lg:inline-block ${
+                messageImageError && `!text-error-medium`
+              }`}
+            >
+              *Sólo imagenes con formato png.
+            </span>
+          </div>
+        </div>
+
+        <div className="flex-col items-center justify-center gap-4 lg:hidden">
+          <div className="flex flex-col gap-2">
+            <label className="block origin-top-left pb-1.5 text-xs font-semibold text-primary transition-all !duration-200 !ease-out will-change-auto group-data-[invalid=true]:!text-error-strong motion-reduce:transition-none">
+              {`Seleccionar logo (opcional)`}
+            </label>
+            <div className="flex flex-row items-center justify-start gap-4">
+              <label
+                htmlFor="logoCompany"
+                className="flex h-20 w-20 cursor-pointer flex-row items-center justify-center gap-2 overflow-hidden rounded-full border border-white/30 bg-white p-1 text-sm text-white outline-none placeholder:text-white focus:border-white lg:h-24 lg:w-24"
+              >
+                {logoFile ? (
+                  <Image
+                    src={`${URL.createObjectURL(logoFile)}`}
+                    alt="user"
+                    width={500}
+                    height={500}
+                    className="object-cover"
+                  />
+                ) : (
+                  <Image
+                    src={"/cookies.png"}
+                    alt="user"
+                    width={500}
+                    height={500}
+                  />
+                )}
+              </label>
+
+              <input
+                {...register("logoCompany", { required: "social is required" })}
+                id="logoCompany"
+                accept="image/png"
+                onChange={(e) => {
+                  if (e.target.files) {
+                    if (
+                      e?.target?.files[0]?.type != "image/png" &&
+                      e?.target?.files[0]?.type != undefined
+                    ) {
+                      setMessageImageError(true);
+                    } else {
+                      if (e?.target?.files[0]?.name == undefined) {
+                        setFileData(logoFile);
+                      } else {
+                        setFileData(e.target.files[0]);
+                        setMessageImageError(false);
+                      }
+                    }
+                  }
+                }}
+                type="file"
+                className="hidden w-80 bg-black text-white"
+                placeholder="John Doe"
+                name="logoCompany"
+              />
+
+              <Button
+                onClick={() => setFileData("")}
+                isDisabled={logoFile ? false : true}
+                className="flex h-10 w-10 min-w-0 bg-error-medium p-0 text-[0.7rem] text-white hover:bg-error-medium/90 lg:hidden lg:w-full lg:max-w-[8rem]"
+                radius="sm"
+                size="sm"
+                type="button"
+              >
+                <FaTrashAlt className="h-6 w-6" />
+              </Button>
+            </div>
+            <span
+              className={`text-[0.66rem] text-secondary lg:inline-block ${
                 messageImageError && `!text-error-medium`
               }`}
             >
