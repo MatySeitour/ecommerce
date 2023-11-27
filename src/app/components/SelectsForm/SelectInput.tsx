@@ -22,7 +22,7 @@ export default function SelectInput({
   return (
     <div className="flex items-center gap-2">
       <div className="w-full pt-6">
-        <div className="flex h-auto w-full flex-wrap items-center justify-center gap-2 pr-2 md:flex-nowrap">
+        <div className="flex h-auto w-full items-center justify-center gap-2 sm:flex-wrap sm:pr-2 md:flex-nowrap">
           <Select
             classNames={{
               trigger: [
@@ -41,7 +41,7 @@ export default function SelectInput({
             }}
             {...register(`${field}`, { required: "social is required" })}
             label={label}
-            className="max-w-xs"
+            className="sm:max-w-xs"
           >
             {options.map((option) => (
               <SelectItem
