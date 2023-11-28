@@ -12,13 +12,13 @@ export default function AccountSuccess() {
         stiffness: 260,
         damping: 20,
       }}
-      className={"h-80 w-[30rem] rounded-md bg-white"}
+      className={"rounded-md bg-white px-4 py-12 sm:h-80 sm:w-[30rem] sm:p-0"}
     >
       <div className="h-full w-full">
         <div className="flex h-full w-full flex-col items-center justify-center gap-3">
           <HiMiniCheckCircle className="h-24 w-24 text-green-400" />
           <div></div>
-          <p className="mb-4 text-center text-xl font-medium text-primary">
+          <p className="mb-4 text-center text-lg font-medium text-primary sm:text-xl">
             ¡Tu cuenta fue creada con éxito!
           </p>
 
