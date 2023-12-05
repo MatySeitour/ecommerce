@@ -29,9 +29,6 @@ export default function SignupInput({
   isVisible?: boolean;
   handleVisible?: () => void | undefined;
 }) {
-  console.log("este es error email", errorEmail);
-  console.log("este es error phone", errorPhone);
-
   const isErrorEmail = errorEmail != 400 ? false : true;
   const isErrorPhone = errorPhone != 400 ? false : true;
 
