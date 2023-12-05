@@ -2,7 +2,8 @@
 const nextConfig = {
     images: {
         domains: [
-            "matungo.s3.us-east-2.amazonaws.com"
+            "matungo.s3.us-east-2.amazonaws.com",
+            "ecommerce-logos.s3.us-east-2.amazonaws.com"
         ],
     },
     experimental: {
