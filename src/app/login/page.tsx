@@ -24,7 +24,7 @@ export default async function login() {
     <>
       <NavLogin />
       <main
-        className={`flex min-h-screen w-screen items-center justify-between bg-slate-200 md:px-12 ${varela.className}`}
+        className={`flex h-screen w-screen items-center justify-between overflow-hidden bg-slate-200 md:px-12 ${varela.className}`}
       >
         <div className="flex w-full flex-row items-center justify-center gap-10">
           <FormLogin />
