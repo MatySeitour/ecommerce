@@ -3,7 +3,13 @@
 @tailwind utilities;
 
 .step-line {
-  background-image: linear-gradient(to right, #fff, #fff, #18c964, #18c964);
+  background-image: linear-gradient(
+    to right,
+    #60a5fa,
+    #60a5fa,
+    #18c964,
+    #18c964
+  );
   background-size: 300% 300%;
   background-position: 0 100%;
   transition: background-position 0.5s;
