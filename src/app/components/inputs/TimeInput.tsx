@@ -29,8 +29,9 @@ export default function TimeInput({
           classNames={{
             inputWrapper: [
               "p-2",
-              `group-data-[focus=true]:border-details-low rounded-[4px] min-h-4 max-h-8 w-full group-data-[hover=true]:bg-white/30 group-data-[focus-visible=true]:ring-0 group-data-[focus-visible=true]:ring-offset-0 ${
-                errorMessage && `bg-error-low text-error-medium`
+              `group-data-[focus=true]:border-details-low border border-details-low rounded-[4px] min-h-4 max-h-8 w-full group-data-[hover=true]:bg-white/30 group-data-[focus-visible=true]:ring-0 group-data-[focus-visible=true]:ring-offset-0 ${
+                errorMessage &&
+                `bg-error-low text-error-medium border-error-medium`
               }`,
             ],
             input: [
