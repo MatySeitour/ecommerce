@@ -22,7 +22,7 @@ export default function FormFirstStep({
       <div
         className={
           step === 1
-            ? `visible flex h-full w-full translate-x-0 flex-col gap-8 transition-all sm:absolute sm:grid sm:h-auto sm:grid-cols-2 sm:gap-4 sm:pr-4`
+            ? `full visible flex w-full translate-x-0 flex-col gap-8 transition-all sm:absolute sm:grid sm:h-auto sm:grid-cols-2 sm:gap-4 sm:pr-4`
             : `invisible absolute grid -translate-x-[40rem] grid-cols-2 gap-4 transition-all`
         }
       >
