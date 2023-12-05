@@ -10,20 +10,10 @@ import protectRoutes from "./functions/protectRoutes";
 async function getData() {
   const sessionCookie = cookies().get("authorization");
   return await protectRoutes(sessionCookie);
-  // if (sessionCookie?.name != "authorization") return redirect("/login");
-  // const isLogin = await getSession(sessionCookie);
-
-  // if (!isLogin) return redirect("/signup");
-  // if (isLogin.IsVerify == false) {
-  //   return redirect("/verify-account");
-  // } else {
-  //   return isLogin;
-  // }
 }
 
 export default async function Home() {
   const log = await getData();
-  console.log(log);
   return (
     // <Nav />
     <main className="min-h-screen w-full bg-slate-100 px-2 pt-24">
