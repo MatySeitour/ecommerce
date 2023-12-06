@@ -37,7 +37,9 @@ export default function SendMail({ emailAccount }: { emailAccount: string }) {
             stiffness: 260,
             damping: 20,
           }}
-          className={"h-auto w-[30rem] rounded-md bg-white p-4 shadow-md"}
+          className={
+            "h-[30rem] px-4 sm:h-auto sm:w-[30rem] sm:rounded-md sm:bg-white sm:p-4 sm:shadow-md"
+          }
         >
           <div className="h-full w-full">
             <div className="flex h-full w-full flex-col items-center justify-center gap-4">
