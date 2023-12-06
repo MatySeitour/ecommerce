@@ -1,7 +1,10 @@
 import { redirect } from "next/navigation";
 import { getSession } from "./session";
+import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 
-export default async function protectRoutes(sessionCookie: any) {
+export default async function protectRoutes(
+  sessionCookie: RequestCookie | undefined,
+) {
   if (sessionCookie?.name != "authorization") return redirect("/login");
   const isLogin = await getSession(sessionCookie);
 
@@ -15,7 +18,9 @@ export default async function protectRoutes(sessionCookie: any) {
   }
 }
 
-export async function protectVerifyAccount(sessionCookie: any) {
+export async function protectVerifyAccount(
+  sessionCookie: RequestCookie | undefined,
+) {
   if (sessionCookie?.name != "authorization") return redirect("/login");
   const isLogin = await getSession(sessionCookie);
 
@@ -26,7 +31,9 @@ export async function protectVerifyAccount(sessionCookie: any) {
   }
 }
 
-export async function protectRoutesAccountSettings(sessionCookie: any) {
+export async function protectRoutesAccountSettings(
+  sessionCookie: RequestCookie | undefined,
+) {
   if (sessionCookie?.name != "authorization") return redirect("/login");
   const isLogin = await getSession(sessionCookie);
 
@@ -37,6 +44,8 @@ export async function protectRoutesAccountSettings(sessionCookie: any) {
   }
 }
 
-export async function protectRoutesSignUp(sessionCookie: any) {
+export async function protectRoutesSignUp(
+  sessionCookie: RequestCookie | undefined,
+) {
   if (sessionCookie?.name == "authorization") return redirect("/");
 }
