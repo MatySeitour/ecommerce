@@ -4,15 +4,16 @@ import { motion } from "framer-motion";
 import OtpInput from "react-otp-input";
 import { useState } from "react";
 import { IoIosMailOpen } from "react-icons/io";
-import { VscDebugRestart } from "react-icons/vsc";
 import { Button } from "@nextui-org/button";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 type StatusCode = 410 | 200 | 400 | null;
 
 export default function EmailOtp({ emailAccount }: { emailAccount: string }) {
   const [otp, setOtp] = useState("");
   const [codeStatus, setCodeStatus] = useState<StatusCode>(null);
+  const router = useRouter();
 
   const handleSendCodeVerify = async () => {
     try {
@@ -23,9 +24,8 @@ export default function EmailOtp({ emailAccount }: { emailAccount: string }) {
         },
         { withCredentials: true },
       );
-      if (res.status == 200) {
-        setCodeStatus(res.status);
-      }
+      console.log(res);
+      router.push("/account-settings");
     } catch (e: any) {
       if (e.response.status == 400 || e.response.status == 410) {
         setCodeStatus(e.response.status);
@@ -43,7 +43,9 @@ export default function EmailOtp({ emailAccount }: { emailAccount: string }) {
         stiffness: 260,
         damping: 20,
       }}
-      className={"h-auto w-[30rem] rounded-md bg-white p-4"}
+      className={
+        "h-full sm:h-auto sm:w-[30rem] sm:rounded-md sm:bg-white sm:p-4"
+      }
     >
       <div className="flex h-full w-full flex-col gap-4">
         <div className="flex h-full w-full flex-col items-center justify-center gap-4">
@@ -93,12 +95,6 @@ export default function EmailOtp({ emailAccount }: { emailAccount: string }) {
           >
             Confirmar
           </Button>
-        </div>
-        <div className="flex w-full items-center justify-center p-1">
-          <div className="flex cursor-pointer items-center justify-center gap-2 rounded-md p-1 px-2">
-            <VscDebugRestart className="flex h-5 w-5 translate-y-[0.05rem] items-center justify-center text-details-low" />
-            <p className="text-sm text-details-low">Reenviar codigo</p>
-          </div>
         </div>
       </div>
     </motion.div>
