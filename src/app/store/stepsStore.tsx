@@ -23,12 +23,12 @@ export const useStep = create<StepValue>((set) => ({
   step: 1,
   logoFile: "",
   increment: (value: number) =>
-    set((state: any) => ({ step: state.step + value })),
+    set((state: StepValue) => ({ step: state.step + value })),
   decrement: (value: number) =>
-    set((state: any) => ({ step: state.step - value })),
+    set((state: StepValue) => ({ step: state.step - value })),
   setFileData: (value: File | string) => set(() => ({ logoFile: value })),
   skip: () => set(() => ({ step: 4 })),
-  setNewStep: (value: number) => set((state: any) => ({ step: value })),
+  setNewStep: (value: number) => set(() => ({ step: value })),
 }));
 
 export const stepsState = create<StepsState>((set) => ({
