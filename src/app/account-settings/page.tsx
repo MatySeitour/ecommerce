@@ -14,15 +14,17 @@ async function getData() {
 }
 
 export default async function accountSettings() {
-  const dataUser: any = await getData();
-  console.log(dataUser);
+  const dataUser = await getData();
 
   return (
     <main
       className={`min-w-screen flex min-h-screen flex-row items-center justify-center bg-slate-200 ${varela.className}`}
     >
       <article className="flex h-screen w-full items-center justify-center bg-slate-300/20 py-4">
-        <FormAccountSettings logoImage={dataUser.logo} />
+        <FormAccountSettings
+          currentStep={dataUser.current_step}
+          logoImage={""}
+        />
       </article>
     </main>
   );
