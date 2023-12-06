@@ -6,39 +6,26 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import multiForm from "../functions/multiForm";
 import FormFirstStep from "./formsSignup/FormFirstStep";
-import FormSecondStep from "./formsSignup/FormSecondStep";
 import { firstStepSchema, secondStepSchema } from "../schemas/signup.schema";
-import { stepsState, useStep } from "../store/stepsStore";
-import Steps from "./Steps";
 import { motion } from "framer-motion";
-
-import AccountSuccess from "./AccountSuccess";
+import { useState } from "react";
+import Link from "next/link";
+import { useStep } from "../store/stepsStore";
 
 export default function FormSignUp() {
   const router = useRouter();
 
-  const {
-    step,
-    backStep,
-    verifyEmail,
-    errorEmail,
-    skipState,
-    setSkipState,
-    skipSignUp,
-    values,
-    sendData,
-    errorPhone,
-    nextStep,
-    addValuesForm,
-    verifyPhone,
-  } = multiForm();
+  const { verifyEmail, errorEmail, sendData, errorPhone, verifyPhone } =
+    multiForm();
+  const { step } = useStep();
+  const [loadingForm, setLoadingForm] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm({
-    resolver: zodResolver(step === 1 ? firstStepSchema : secondStepSchema),
+    resolver: zodResolver(firstStepSchema),
   });
 
   const containerSignUpAnimation = {
@@ -64,50 +51,20 @@ export default function FormSignUp() {
     },
   };
 
-  const { completeSecondStep, completeFirstStep } = stepsState();
-  const { logoFile } = useStep();
-
   const onSubmit = async (data: FieldValues) => {
-    if (step == 1) {
+    try {
       const isEmailValidate = await verifyEmail(data);
       const isPhoneValidate = await verifyPhone(data);
-      // if (isEmailValidate == false || isPhoneValidate == false) {
-      //   router.push("/error-server");
-      // }
       if (isEmailValidate && isPhoneValidate) {
-        nextStep(step, data);
-        completeFirstStep();
-      }
-    }
-    if (step == 2) {
-      const dataWithImage = { ...data, logoCompany: logoFile };
-      nextStep(1, dataWithImage);
-      completeSecondStep();
-    }
-    if (step == 3) {
-      const dataWithImage3 = { ...data, logoCompany: logoFile };
-      addValuesForm(dataWithImage3);
-      if (values != undefined) {
-        const a = await sendData(values);
+        const a = await sendData(data);
         console.log(a);
+        setLoadingForm(true);
+        router.push("/verify-account");
       }
-    }
-    if (skipState) {
-      try {
-        skipSignUp(data);
-        if (values != undefined) {
-          const a = await sendData(values);
-          console.log(a);
-        }
-        // skip();
-      } catch (e) {
-        console.error(e);
-        setSkipState(false);
-      }
-      // setStep(4);
+    } catch (e) {
+      console.error(e);
     }
   };
-  console.log(values);
 
   return (
     <div className={`h-full w-full overflow-y-scroll sm:overflow-hidden`}>
@@ -117,67 +74,59 @@ export default function FormSignUp() {
         animate="visible"
         className={
           step != 4
-            ? "flex h-full flex-col gap-6 sm:items-center sm:justify-center md:gap-8 md:px-10 lg:visible lg:w-full lg:py-2 lg:transition-all"
+            ? "flex h-full flex-col items-center justify-center gap-6 sm:items-center sm:justify-center md:gap-8 md:px-10 lg:visible lg:w-full lg:py-2 lg:transition-all"
             : "invisible hidden h-full w-full flex-col items-center justify-center gap-4 px-10 py-2 transition-all"
         }
       >
         <motion.div
-          className="shadow-mobile__steps flex w-full flex-col gap-4 py-4 sm:w-auto sm:shadow-none"
+          className="flex w-full flex-col gap-4 py-4 sm:w-auto sm:shadow-none"
           variants={itemAnimation}
         >
-          <Steps />
-
           <motion.h2
             variants={itemAnimation}
             className="text-center text-4xl font-extrabold text-primary"
           >
-            Crea tu negocio
+            Crea tu cuenta
           </motion.h2>
           <motion.h3
             variants={itemAnimation}
             className="text-center text-lg font-medium text-details-low"
           >
-            Crea el perfil de tu negocio online{" "}
+            Crea una cuenta para administrar tu negocio online{" "}
           </motion.h3>
         </motion.div>
 
         <motion.form
           noValidate
           onSubmit={handleSubmit(onSubmit)}
-          className="flex h-full flex-col gap-6 px-4 sm:h-auto sm:gap-4 sm:px-0"
+          className="flex h-full flex-col justify-between gap-6 px-4 sm:h-auto sm:gap-4 sm:px-0"
         >
           <motion.div
             variants={itemAnimation}
-            className="relative flex h-full items-center justify-center overflow-hidden sm:h-64"
+            className="relative flex items-center justify-center overflow-hidden sm:h-64"
           >
-            {step >= 1 && (
-              <FormFirstStep
-                step={step}
-                errors={errors}
-                register={register}
-                errorEmail={errorEmail}
-                errorPhone={errorPhone}
-              />
-            )}
-
-            {step >= 1 && (
-              <FormSecondStep step={step} errors={errors} register={register} />
-            )}
-          </motion.div>
-          <motion.div variants={itemAnimation} className="text-center">
-            <p className="text-xs">
-              Esta información se guardará de forma segura según{" "}
-              <b className="underline">
-                los términos de servicio y la política de privacidad.
-              </b>
-            </p>
+            <FormFirstStep
+              step={step}
+              errors={errors}
+              register={register}
+              errorEmail={errorEmail}
+              errorPhone={errorPhone}
+            />
           </motion.div>
 
           <motion.div
             variants={itemAnimation}
-            className="flex flex-row items-center justify-center gap-4"
+            className="flex flex-col items-center justify-center gap-8"
           >
-            <Button
+            <motion.div variants={itemAnimation} className="text-center">
+              <p className="text-xs">
+                Esta información se guardará de forma segura según{" "}
+                <b className="underline">
+                  los términos de servicio y la política de privacidad.
+                </b>
+              </p>
+            </motion.div>
+            {/* <Button
               className={`bg-white text-details-medium hover:bg-white/40 ${
                 step < 2 && `hidden`
               }`}
@@ -186,17 +135,17 @@ export default function FormSignUp() {
               size="md"
             >
               Atrás
-            </Button>
+            </Button> */}
             <Button
-              isLoading={isSubmitting ? true : false}
-              className={`w-full bg-details-medium text-white hover:bg-details-medium/90 `}
+              isLoading={loadingForm ? true : false}
+              className={`w-full max-w-sm bg-details-medium text-white hover:bg-details-medium/90 `}
               radius="sm"
               size="md"
               type="submit"
             >
-              {isSubmitting ? "" : "Siguiente paso"}
+              {loadingForm ? "" : "Crear cuenta"}
             </Button>
-            {step > 1 && (
+            {/* {step > 1 && (
               <Button
                 onClick={() => setSkipState(true)}
                 isLoading={isSubmitting ? true : false}
@@ -207,19 +156,13 @@ export default function FormSignUp() {
               >
                 {isSubmitting ? "" : "Omitir"}
               </Button>
-            )}
+            )} */}
+            <Link className="text-sm hover:underline" href={"/login"}>
+              ¿Ya tienes una cuenta?
+            </Link>
           </motion.div>
         </motion.form>
       </motion.div>
-      <div
-        className={
-          step == 4
-            ? "flex h-full w-full items-center justify-center"
-            : "h-0 w-0"
-        }
-      >
-        {step == 4 && <AccountSuccess />}
-      </div>
     </div>
   );
 }
