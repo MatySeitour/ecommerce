@@ -3,7 +3,6 @@ import LoadingData from "../loading";
 import { varela } from "../utils/fonts";
 import dynamic from "next/dynamic";
 import { cookies } from "next/headers";
-import { DataUserAccount } from "../types";
 import { protectRoutesSignUp } from "../functions/protectRoutes";
 
 async function getData() {
