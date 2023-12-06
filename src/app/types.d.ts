@@ -19,7 +19,7 @@ type DataCompanyEssential = {
   phone: number;
 };
 
-type InfoCompany = {
+export type InfoCompany = {
   province: string;
   city: string;
   businessAddress: string;
@@ -27,5 +27,5 @@ type InfoCompany = {
   closedWeek: Week;
   openTime: TimeHour;
   closedTime: TimeHour;
-  logoCompany?: File;
+  logoCompany?: File | "";
 };
