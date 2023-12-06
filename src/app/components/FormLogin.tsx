@@ -20,14 +20,14 @@ export const FormLogin = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset,
-    getValues,
   } = useForm<FormValues>();
 
   const [isVisible, setIsVisible] = useState(false);
 
   const [errorLogin, setErrorLogin] = useState(false);
   const [errorServer, setErrorServer] = useState(false);
+
+  const [redirectLoading, setRedirectLoading] = useState(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -42,7 +42,7 @@ export const FormLogin = () => {
         },
         { withCredentials: true },
       );
-
+      setRedirectLoading(true);
       window.location.pathname = "/";
     } catch (e) {
       if (axios.isAxiosError(e)) {
@@ -57,12 +57,12 @@ export const FormLogin = () => {
   };
   return (
     <div className="h-auto w-auto rounded-3xl bg-white px-4 py-8 shadow-lg md:w-full md:max-w-[35rem]">
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-6">
         <div className="flex flex-col items-center justify-center gap-2">
           <h2 className="text-2xl font-semibold text-primary">
             Iniciar sesión
           </h2>
-          <p className="px-6 text-center text-xs font-normal text-primary">
+          <p className="px-6 text-center text-xs font-normal text-secondary">
             Ingresa tus datos para iniciar sesión en tu cuenta.
           </p>
         </div>
@@ -154,17 +154,17 @@ export const FormLogin = () => {
               variant="shadow"
               className="w-full max-w-[18rem] bg-details-medium text-white hover:bg-details-medium/90"
               radius="sm"
-              isLoading={isSubmitting ? true : false}
+              isLoading={redirectLoading ? true : false}
             >
-              {isSubmitting ? "" : "Iniciar sesión"}
+              {redirectLoading ? "" : "Iniciar sesión"}
             </Button>
           </div>
         </form>
         <LoginWithOther />
-        <div className="flex justify-center gap-1 text-[0.6rem]">
+        <div className="flex justify-center gap-1 text-[0.8rem]">
           ¿No tienes una cuenta?{" "}
           <Link href={"/signup"} className="inline-block">
-            <b>Creála ahora</b>
+            <b className="text-details-medium">Creála ahora</b>
           </Link>
         </div>
       </div>
