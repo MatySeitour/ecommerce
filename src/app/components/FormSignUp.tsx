@@ -118,14 +118,14 @@ export default function FormSignUp() {
             variants={itemAnimation}
             className="flex flex-col items-center justify-center gap-8"
           >
-            <motion.div variants={itemAnimation} className="text-center">
+            <div className="text-center">
               <p className="text-xs">
                 Esta información se guardará de forma segura según{" "}
                 <b className="underline">
                   los términos de servicio y la política de privacidad.
                 </b>
               </p>
-            </motion.div>
+            </div>
             {/* <Button
               className={`bg-white text-details-medium hover:bg-white/40 ${
                 step < 2 && `hidden`
@@ -138,7 +138,7 @@ export default function FormSignUp() {
             </Button> */}
             <Button
               isLoading={loadingForm ? true : false}
-              className={`w-full max-w-sm bg-details-medium text-white hover:bg-details-medium/90 `}
+              className={`w-full max-w-sm bg-button-style text-white shadow-md hover:bg-details-medium/90`}
               radius="sm"
               size="md"
               type="submit"
