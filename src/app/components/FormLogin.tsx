@@ -151,8 +151,7 @@ export const FormLogin = () => {
               disabled={isSubmitting}
               type="submit"
               color="primary"
-              variant="shadow"
-              className="w-full max-w-[18rem] bg-details-medium text-white hover:bg-details-medium/90"
+              className="w-full max-w-[18rem] bg-button-style text-white shadow-md hover:bg-details-medium/90"
               radius="sm"
               isLoading={redirectLoading ? true : false}
             >
