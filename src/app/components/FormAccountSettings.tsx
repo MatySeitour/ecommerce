@@ -10,7 +10,7 @@ import { firstStepSchema, secondStepSchema } from "../schemas/signup.schema";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import FormSecondStep from "./formsSignup/FormSecondStep";
-import Steps from "./Steps";
+import Steps from "./StepsContainer";
 import { useStep } from "../store/stepsStore";
 import Image from "next/image";
 
@@ -70,7 +70,7 @@ export default function FormAccountSettings({
       const a = await sendFirstStepData(dataWithImage);
       console.log(a);
       setNewStep(currentStep + 1);
-      // setLoadingForm(true);
+      setLoadingForm(true);
     } catch (e) {
       console.error(e);
     }
