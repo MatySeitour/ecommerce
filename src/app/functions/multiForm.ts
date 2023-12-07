@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
 import { FieldValues } from "react-hook-form";
-import { stepsState, useStep } from "../store/stepsStore";
+import { useStep } from "../store/stepsStore";
 import { DataUserAccount } from "../types";
+import { useRouter } from "next/navigation";
+import { InfoCompany } from "../types";
 
 export default function useMultiForm() {
   const [values, setValues] = useState<DataUserAccount>();
@@ -10,9 +12,9 @@ export default function useMultiForm() {
   const [errorPhone, setErrorPhone] = useState<number>(0);
   const [skipState, setSkipState] = useState<boolean>(false);
 
-  const { completeFirstStep } = stepsState();
+  const { increment, decrement } = useStep();
 
-  const { step, increment, decrement, skip } = useStep();
+  const router = useRouter();
 
   function addValuesForm(data: FieldValues) {
     setValues((): any => {
@@ -82,7 +84,7 @@ export default function useMultiForm() {
     addValuesForm(data);
   }
 
-  async function sendData(data: DataUserAccount) {
+  async function sendData(data: any) {
     try {
       const res = await axios.postForm(
         "http://localhost:3000/signup",
@@ -92,6 +94,21 @@ export default function useMultiForm() {
           confirmPassword: data?.confirmPassword,
           email: data?.email,
           phone: data?.phone,
+        },
+        { withCredentials: true },
+      );
+      console.log(res);
+    } catch (error: any) {
+      setSkipState(false);
+      console.error(error);
+    }
+  }
+
+  async function sendFirstStepData(data: InfoCompany) {
+    try {
+      const res = await axios.postForm(
+        "http://localhost:3000/send-first-step",
+        {
           province: data?.province,
           city: data?.city,
           businessAddress: data?.businessAddress,
@@ -103,7 +120,7 @@ export default function useMultiForm() {
         },
         { withCredentials: true },
       );
-      skip();
+
       console.log(res);
     } catch (error: any) {
       setSkipState(false);
@@ -112,7 +129,6 @@ export default function useMultiForm() {
   }
 
   return {
-    step,
     nextStep,
     backStep,
     values,
@@ -127,5 +143,6 @@ export default function useMultiForm() {
     addValuesForm,
     verifyPhone,
     errorPhone,
+    sendFirstStepData,
   };
 }
