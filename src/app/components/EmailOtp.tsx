@@ -13,6 +13,8 @@ type StatusCode = 410 | 200 | 400 | null;
 export default function EmailOtp({ emailAccount }: { emailAccount: string }) {
   const [otp, setOtp] = useState("");
   const [codeStatus, setCodeStatus] = useState<StatusCode>(null);
+  const [isValidateCodeLoading, setIsValidateCodeLoading] = useState(false);
+
   const router = useRouter();
 
   const handleSendCodeVerify = async () => {
@@ -24,11 +26,12 @@ export default function EmailOtp({ emailAccount }: { emailAccount: string }) {
         },
         { withCredentials: true },
       );
-      console.log(res);
+      setIsValidateCodeLoading(true);
       router.push("/account-settings");
     } catch (e: any) {
       if (e.response.status == 400 || e.response.status == 410) {
         setCodeStatus(e.response.status);
+        setIsValidateCodeLoading(false);
         console.error(e);
       }
     }
@@ -92,8 +95,9 @@ export default function EmailOtp({ emailAccount }: { emailAccount: string }) {
             radius="md"
             onClick={() => handleSendCodeVerify()}
             className="bg-button-style text-white shadow-lg"
+            isLoading={isValidateCodeLoading ? true : false}
           >
-            Confirmar
+            {isValidateCodeLoading ? "" : "Verificar cuenta"}
           </Button>
         </div>
       </div>
