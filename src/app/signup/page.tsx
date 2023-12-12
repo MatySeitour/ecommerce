@@ -21,7 +21,7 @@ export default async function register() {
   const dataUser = await getData();
 
   return (
-    <main className={` bg-slate-200 ${varela.className}`}>
+    <main className={`${varela.className}`}>
       <ClientPage />
     </main>
   );
