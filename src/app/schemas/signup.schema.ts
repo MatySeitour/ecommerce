@@ -55,7 +55,6 @@ export const secondStepSchema = z.object({
       return file.length == 0 || ACCEPTED_IMAGE_TYPES.includes(file[0]?.type);
     }, "Sólo se permiten imagenes con la extensión .png")
     .optional(),
-
   businessAddress: z.string().refine((address) => {
     return address.length != 0;
   }, "Escribe la dirección de tu negocio."),
