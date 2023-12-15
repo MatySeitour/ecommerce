@@ -12,6 +12,13 @@ const config: Config = {
     extend: {
       backgroundImage: {
         "button-style": "linear-gradient(to top right, #60a5fa, #1d4ed8)",
+        none: "none",
+        onboarding: "linear-gradient(to top right, #60a5fa, #fff)",
+        cardProduct: "linear-gradient(to top, #60a5fa, #fff)",
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic":
+          "conic-gradient(from 168deg at 30%, rgba(100, 100, 100, 0.4),var(--tw-gradient-stops), #666)",
+        home: "linear-gradient(#fff .08rem, transparent .08rem),linear-gradient(to right, #fff .08rem, #fff .08rem)",
       },
       keyframes: {
         loadingIcons: {
